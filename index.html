@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ASD US K2 - Feminile U14</title>
-<meta name="description" content="Sito ufficiale ASD US K2, squadra di pallavolo. Calendario, risultati, classifica, elenco delle atlete, foto e video della stagione 2026/2027.">
+<title>ASD US K2 — Pallavolo</title>
+<meta name="description" content="Sito ufficiale ASD US K2, squadra di pallavolo. Calendario, risultati, classifica, elenco atlete, foto e video della stagione 2026/2027.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -275,7 +275,7 @@
   <div class="nav">
     <a href="#" class="logo">
       <span class="logo-badge">K2</span>
-      <span class="logo-testo">ASD US K2<span>Pallavolo Feminile - u14</span></span>
+      <span class="logo-testo">ASD US K2<span>Pallavolo</span></span>
     </a>
     <button class="menu-btn" id="menuBtn" aria-label="Apri il menu" aria-expanded="false">☰</button>
     <nav class="links" id="menuLinks">
@@ -295,10 +295,10 @@
   <!-- HERO -->
   <section class="hero">
     <div class="wrap">
-      <div class="hero-eyebrow">Stagione 2026/2027</div>
+      <div class="hero-eyebrow">Stagione 2026/2027 in arrivo</div>
       <div class="hero-riga">
         <div>
-          <h1>ASD US K2 -<em> (U14)</em></h1>
+          <h1>ASD US K2<br><em>Pallavolo</em></h1>
           <p class="sub">Il punto di riferimento per atlete, famiglie e tifosi: calendario partite, risultati, classifica, foto e video della squadra, tutto in un solo posto.</p>
           <div class="cta-riga">
             <a href="#calendario" class="btn btn-primario">Vedi il calendario</a>
@@ -308,7 +308,7 @@
       </div>
       <div class="hero-stats">
         <div class="stat"><b id="statPartite">—</b><span>Partite in calendario</span></div>
-        <!--<div class="stat"><b id="statAtlete">—</b><span>Atlete in rosa</span></div> -->
+        <div class="stat"><b id="statAtlete">—</b><span>Atlete in rosa</span></div>
         <div class="stat"><b id="statPosizione">—</b><span>Posizione in classifica</span></div>
         <div class="stat"><b>26/27</b><span>Stagione in corso</span></div>
       </div>
@@ -389,7 +389,7 @@
 
   <!-- VIDEO -->
   <section class="video-sezione" id="video">
-    <div class="wrap"> 
+    <div class="wrap">
       <div class="intestazione">
         <div class="tag">Video</div>
         <h2>Azioni e highlights</h2>
@@ -404,7 +404,7 @@
     <div class="wrap">
       <div class="intestazione">
         <div class="tag">Elenco atlete</div>
-       <!-- <h2>La rosa 2026/2027</h2> -->
+        <h2>La rosa 2026/2027</h2>
         <p>Numero di maglia, nome e ruolo di ogni atleta della squadra.</p>
       </div>
       <div class="elenco-griglia" id="grigliaElenco"></div>
@@ -417,7 +417,7 @@
   <div class="wrap">
     <div class="footer-griglia">
       <div>
-        <h4>ASD US K2 — U14 (Feminile)</h4>
+        <h4>ASD US K2 — Pallavolo</h4>
         <p>Il sito ufficiale della squadra per atlete, genitori e tifosi. Calendario, risultati e novità sempre aggiornati.</p>
       </div>
       <div>
@@ -447,8 +447,8 @@
 
 // --- NOTIZIE / AVVISI ---
 const notizie = [
-  { data: "Presto", titolo: "Iscrizioni 2026/2027", testo: "Le iscrizioni per la nuova stagione sono aperte. La scadenza è entro fine mese. Contattate la società per informazioni.", evidenza: true },
-  { data: "20/09/2026", titolo: "Grigliata", testo: "La grigliata a Trezzano è prevista per il 20 settembre 2026. Nei prossimi giorni verrà pubblicato un sondaggio nel gruppo WhatsApp per raccogliere le adesioni e agevolare l'organizzazione dell'evento.", evidenza: false },
+  { data: "Presto online", titolo: "Iscrizioni aperte 2026/2027", testo: "Le iscrizioni per la nuova stagione sono aperte. Contattate la società per informazioni.", evidenza: true },
+  { data: "Da definire", titolo: "Inizio allenamenti", testo: "La data di inizio degli allenamenti verrà comunicata a breve su questa pagina.", evidenza: false },
   { data: "Da definire", titolo: "Presentazione della rosa", testo: "A breve la presentazione ufficiale delle atlete e dello staff tecnico.", evidenza: false }
 ];
 
@@ -456,7 +456,7 @@ const notizie = [
 // tipo: "Campionato" oppure "Amichevole"
 // casa: true = in casa, false = trasferta
 const calendario = [
-  { giorno:"1", data: "26/09/2026", avversario: "Primavera", tipo: "Amichevole", orario: "14:30", luogo: "Da definire", casa: false }
+  { giorno: "Da definire", data: "—", avversario: "Calendario in aggiornamento", tipo: "Campionato", orario: "—", luogo: "—", casa: true }
 ];
 
 // --- ULTIMI RISULTATI ---
@@ -464,31 +464,24 @@ const calendario = [
 const risultati = [
   // Esempio da compilare quando iniziano le partite:
   // { esito: "V", avversario: "Nome Squadra", quando: "12 ottobre 2026", punteggio: "3-1" }
-  { esito: "-", avversario: "Primavera", quando: "26 settembre 2026", punteggio: "0-0" }
 ];
 
 // --- CLASSIFICA ---
 const classifica = [
   // Esempio: { pos: 1, squadra: "ASD US K2", g: 0, v: 0, p: 0, punti: 0, noi: true }
-  { pos: 1, squadra: "ASD US K2", g: 0, v: 0, p: 0, punti: 0, noi: true }
 ];
 
 // --- ELENCO ATLETE ---
 // Aggiungete una riga per ogni atleta della rosa
 const atlete = [
   // Esempio: { numero: 4, nome: "Nome Cognome", ruolo: "Schiacciatrice" }
-  { numero: 80, nome: "Melissa", ruolo: "Opposto" }
-  { numero: 81, nome: "Michela", ruolo: "Schiacciatrice" }
-  { numero: 94, nome: "Antonella", ruolo: "Centrale" }
-  
 ];
 
 // --- VIDEO ---
 const video = [
-  { titolo: "Highlights partita", descrizione: "HIGHLIGHTS | A2 femminile, Itas Trentino-Arctic Volley Rovaniemi." },
+  { titolo: "Highlights partita", descrizione: "I video della stagione saranno pubblicati qui." },
   { titolo: "Allenamenti", descrizione: "Contenuti in arrivo con l'inizio della stagione." },
   { titolo: "Interviste", descrizione: "Contenuti in arrivo con l'inizio della stagione." }
-  
 ];
 
 // --- NUMERO DI RIQUADRI NELLA GALLERIA FOTO (senza foto reali per ora) ---
