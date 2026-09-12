@@ -417,7 +417,7 @@
   <div class="wrap">
     <div class="footer-griglia">
       <div>
-        <h4>ASD US K2 — Pallavolo</h4>
+        <h4>ASD US K2 — Feminile - U14</h4>
         <p>Il sito ufficiale della squadra per atlete, genitori e tifosi. Calendario, risultati e novità sempre aggiornati.</p>
       </div>
       <div>
@@ -447,7 +447,7 @@
 
 // --- NOTIZIE / AVVISI ---
 const notizie = [
-  { data: "Presto online", titolo: "Iscrizioni aperte 2026/2027", testo: "Le iscrizioni per la nuova stagione sono aperte. Contattate la società per informazioni.", evidenza: true },
+  { data: "Presto", titolo: "Iscrizioni 2026/2027", testo: "Le iscrizioni per la nuova stagione sono aperte. Contattate la società per informazioni.", evidenza: true },
   { data: "Da definire", titolo: "Inizio allenamenti", testo: "La data di inizio degli allenamenti verrà comunicata a breve su questa pagina.", evidenza: false },
   { data: "Da definire", titolo: "Presentazione della rosa", testo: "A breve la presentazione ufficiale delle atlete e dello staff tecnico.", evidenza: false }
 ];
@@ -456,25 +456,29 @@ const notizie = [
 // tipo: "Campionato" oppure "Amichevole"
 // casa: true = in casa, false = trasferta
 const calendario = [
-  { giorno: "Da definire", data: "—", avversario: "Calendario in aggiornamento", tipo: "Campionato", orario: "—", luogo: "—", casa: true }
+  { giorno: "1", data: "26/09/2026", avversario: "Primavera", tipo: "Amichevole", orario: "14:30", luogo: "—", casa: false }
 ];
 
 // --- ULTIMI RISULTATI ---
 // esito: "V" (vittoria) oppure "P" (sconfitta)
 const risultati = [
   // Esempio da compilare quando iniziano le partite:
-  // { esito: "V", avversario: "Nome Squadra", quando: "12 ottobre 2026", punteggio: "3-1" }
+   { esito: "-", avversario: "Primavera", quando: "26 settembre 2026", punteggio: "0-0" }
 ];
 
 // --- CLASSIFICA ---
 const classifica = [
   // Esempio: { pos: 1, squadra: "ASD US K2", g: 0, v: 0, p: 0, punti: 0, noi: true }
+  { pos: 1, squadra: "ASD US K2", g: 0, v: 0, p: 0, punti: 0, noi: true }
 ];
 
 // --- ELENCO ATLETE ---
 // Aggiungete una riga per ogni atleta della rosa
 const atlete = [
   // Esempio: { numero: 4, nome: "Nome Cognome", ruolo: "Schiacciatrice" }
+  { numero: 80, nome: "Melissa", ruolo: "Opostto" }
+  { numero: 81, nome: "Michela", ruolo: "Schiacciatrice" }
+  { numero: 94, nome: "Antonella", ruolo: "Centrale" }
 ];
 
 // --- VIDEO ---
