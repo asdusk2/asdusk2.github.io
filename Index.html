@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ASD US K2 — Pallavolo</title>
+<meta name="description" content="Sito ufficiale ASD US K2, squadra di pallavolo. Calendario, risultati, classifica, elenco atlete, foto e video della stagione 2026/2027.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --blu-notte: #071A3D;
+    --blu: #0B2F6B;
+    --blu-acceso: #1857C4;
+    --giallo: #FFD100;
+    --bianco: #FFFFFF;
+    --panna: #F4F6FA;
+    --riga: #E1E6EF;
+    --testo: #1C2333;
+    --testo-chiaro: #6B7488;
+    --radius: 14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    font-family:'Manrope', sans-serif;
+    color:var(--testo);
+    background:var(--panna);
+    line-height:1.55;
+  }
+  h1,h2,h3,h4, .display, .numero-maglia, .punteggio{
+    font-family:'Oswald', sans-serif;
+    text-transform:uppercase;
+    letter-spacing:0.01em;
+  }
+  a{color:inherit;}
+  img{max-width:100%; display:block;}
+  .wrap{max-width:1180px; margin:0 auto; padding:0 24px;}
+  section{padding:88px 0;}
+  @media (max-width:640px){ section{padding:60px 0;} }
+
+  /* ---------- HEADER ---------- */
+  header{
+    position:sticky; top:0; z-index:50;
+    background:var(--blu-notte);
+    border-bottom:3px solid var(--giallo);
+  }
+  .nav{
+    display:flex; align-items:center; justify-content:space-between;
+    padding:14px 24px; max-width:1180px; margin:0 auto;
+  }
+  .logo{
+    display:flex; align-items:center; gap:12px;
+    color:var(--bianco); text-decoration:none;
+  }
+  .logo-badge{
+    width:42px; height:42px; border-radius:50%;
+    background:conic-gradient(var(--giallo) 0 25%, var(--blu-acceso) 0 50%, var(--giallo) 0 75%, var(--blu-acceso) 0);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Oswald',sans-serif; font-weight:700; color:var(--blu-notte);
+    font-size:15px; flex:none; overflow:hidden;
+  }
+  .logo-badge img{width:100%; height:100%; object-fit:cover; border-radius:50%;}
+  .logo-testo{font-family:'Oswald',sans-serif; font-weight:700; font-size:18px; letter-spacing:0.03em;}
+  .logo-testo span{display:block; font-family:'Manrope',sans-serif; text-transform:none; font-weight:500; font-size:11px; color:var(--giallo); letter-spacing:0.04em;}
+  nav.links{display:flex; gap:26px; align-items:center;}
+  nav.links a{
+    color:#C9D3EA; text-decoration:none; font-size:14.5px; font-weight:600;
+    padding:6px 2px; border-bottom:2px solid transparent; transition:border-color .15s, color .15s;
+  }
+  nav.links a:hover, nav.links a:focus-visible{color:var(--bianco); border-color:var(--giallo);}
+  .menu-btn{display:none; background:none; border:1px solid #2B3E63; color:var(--bianco); font-size:22px; padding:6px 12px; border-radius:8px; cursor:pointer;}
+  @media (max-width:880px){
+    nav.links{
+      position:absolute; top:100%; left:0; right:0; background:var(--blu-notte);
+      flex-direction:column; align-items:flex-start; padding:8px 24px 20px; gap:2px;
+      border-bottom:3px solid var(--giallo); display:none;
+    }
+    nav.links.aperto{display:flex;}
+    nav.links a{width:100%; padding:12px 0; border-bottom:1px solid #17264A;}
+    .menu-btn{display:block;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative; overflow:hidden;
+    background:var(--blu-notte);
+    color:var(--bianco);
+    padding:96px 0 76px;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      repeating-linear-gradient(115deg, rgba(255,209,0,0.05) 0 2px, transparent 2px 64px),
+      linear-gradient(160deg, var(--blu) 0%, var(--blu-notte) 55%, var(--blu-notte) 100%);
+    z-index:0;
+  }
+  .hero::after{
+    content:"";
+    position:absolute; right:-120px; top:-120px; width:520px; height:520px; border-radius:50%;
+    border:3px solid rgba(255,209,0,0.18);
+    z-index:0;
+  }
+  .hero .wrap{position:relative; z-index:1;}
+  .hero-riga{display:flex; align-items:flex-end; gap:56px; flex-wrap:wrap;}
+  .hero-eyebrow{
+    display:inline-flex; align-items:center; gap:10px;
+    background:rgba(255,209,0,0.12); border:1px solid rgba(255,209,0,0.4);
+    color:var(--giallo); font-weight:700; font-size:13.5px; letter-spacing:.02em;
+    padding:6px 14px; border-radius:100px; margin-bottom:22px;
+  }
+  .hero-eyebrow::before{content:"●"; font-size:9px;}
+  .hero h1{font-size:clamp(46px, 8vw, 92px); line-height:0.95; margin:0 0 6px;}
+  .hero h1 em{font-style:normal; color:var(--giallo);}
+  .hero p.sub{font-size:19px; color:#C9D3EA; max-width:520px; font-weight:500; margin:18px 0 32px;}
+  .cta-riga{display:flex; gap:14px; flex-wrap:wrap;}
+  .btn{
+    display:inline-block; padding:14px 26px; border-radius:10px; font-weight:700;
+    font-size:15px; text-decoration:none; cursor:pointer; border:2px solid transparent;
+    font-family:'Manrope',sans-serif;
+  }
+  .btn-primario{background:var(--giallo); color:var(--blu-notte);}
+  .btn-primario:hover{background:#ffdd33;}
+  .btn-secondario{background:transparent; border-color:#3A4E78; color:var(--bianco);}
+  .btn-secondario:hover{border-color:var(--giallo); color:var(--giallo);}
+
+  .hero-stats{
+    display:flex; gap:0; margin-top:64px; border-top:1px solid #223257; padding-top:28px;
+    flex-wrap:wrap;
+  }
+  .stat{flex:1; min-width:130px; padding-right:24px;}
+  .stat b{display:block; font-family:'Oswald',sans-serif; font-size:34px; color:var(--giallo);}
+  .stat span{font-size:13.5px; color:#8FA0C4; font-weight:600;}
+
+  /* ---------- SECTION HEADINGS ---------- */
+  .intestazione{max-width:620px; margin-bottom:44px;}
+  .intestazione .tag{color:var(--blu-acceso); font-weight:700; font-size:13.5px; letter-spacing:.03em;}
+  .intestazione h2{font-size:clamp(30px,4vw,42px); margin:6px 0 10px; color:var(--blu-notte);}
+  .intestazione p{color:var(--testo-chiaro); font-size:16px; margin:0;}
+  .intestazione-riga{display:flex; justify-content:space-between; align-items:flex-end; gap:24px; flex-wrap:wrap;}
+
+  /* ---------- NOTIZIE ---------- */
+  .notizie{background:var(--bianco);}
+  .notizie-lista{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
+  @media (max-width:880px){.notizie-lista{grid-template-columns:1fr;}}
+  .notizia{
+    border:1px solid var(--riga); border-radius:var(--radius); padding:24px;
+    background:var(--panna); position:relative;
+  }
+  .notizia .data{font-weight:700; color:var(--blu-acceso); font-size:13px; letter-spacing:.02em;}
+  .notizia h3{font-size:19px; text-transform:none; letter-spacing:0; margin:10px 0 8px; color:var(--blu-notte);}
+  .notizia p{color:var(--testo-chiaro); font-size:14.5px; margin:0;}
+  .notizia.evidenza{background:var(--blu-notte); border-color:var(--blu-notte); color:var(--bianco);}
+  .notizia.evidenza .data{color:var(--giallo);}
+  .notizia.evidenza h3{color:var(--bianco);}
+  .notizia.evidenza p{color:#B9C3DC;}
+
+  /* ---------- CALENDARIO ---------- */
+  .calendario{background:var(--panna);}
+  table{width:100%; border-collapse:collapse; background:var(--bianco); border-radius:var(--radius); overflow:hidden; box-shadow:0 1px 0 var(--riga);}
+  thead th{
+    background:var(--blu-notte); color:var(--giallo); text-align:left; font-family:'Oswald',sans-serif;
+    font-weight:500; font-size:13px; letter-spacing:.03em; padding:14px 18px;
+  }
+  tbody td{padding:16px 18px; border-bottom:1px solid var(--riga); font-size:14.5px;}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:#FBFBFE;}
+  .giorno-pill{
+    display:inline-block; background:var(--panna); border:1px solid var(--riga); color:var(--blu-notte);
+    font-weight:700; font-size:12.5px; padding:4px 10px; border-radius:100px;
+  }
+  .badge{display:inline-block; font-size:12px; font-weight:700; padding:4px 10px; border-radius:6px;}
+  .badge-casa{background:#E8F0FF; color:var(--blu-acceso);}
+  .badge-trasferta{background:#FFF3D6; color:#8A6400;}
+  .table-scroll{overflow-x:auto;}
+  @media (max-width:760px){ table{min-width:640px;} }
+
+  /* ---------- RISULTATI / CLASSIFICA ---------- */
+  .risultati{background:var(--bianco);}
+  .griglia-doppia{display:grid; grid-template-columns:1.1fr 1fr; gap:44px; align-items:start;}
+  @media (max-width:900px){.griglia-doppia{grid-template-columns:1fr;}}
+  .risultato-card{
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    border:1px solid var(--riga); border-radius:var(--radius); padding:18px 22px; margin-bottom:14px;
+  }
+  .risultato-card .chi{display:flex; align-items:center; gap:14px;}
+  .esito{
+    width:38px; height:38px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+    font-family:'Oswald',sans-serif; font-weight:700; color:var(--bianco); flex:none;
+  }
+  .esito.v{background:var(--blu-acceso);}
+  .esito.p{background:#B7BECF;}
+  .risultato-card .avversario{font-weight:700; color:var(--blu-notte); font-size:15.5px;}
+  .risultato-card .quando{font-size:13px; color:var(--testo-chiaro);}
+  .risultato-card .punteggio{font-size:22px; color:var(--blu-notte);}
+  .classifica-tabella th:first-child, .classifica-tabella td:first-child{text-align:center; width:44px;}
+  .riga-k2{background:#FFF9E0;}
+
+  /* ---------- GALLERIA ---------- */
+  .galleria{background:var(--blu-notte); color:var(--bianco);}
+  .galleria .intestazione .tag{color:var(--giallo);}
+  .galleria .intestazione h2{color:var(--bianco);}
+  .galleria .intestazione p{color:#B9C3DC;}
+  .galleria-griglia{display:grid; grid-template-columns:repeat(4,1fr); gap:14px;}
+  @media (max-width:880px){.galleria-griglia{grid-template-columns:repeat(2,1fr);}}
+  .foto-placeholder{
+    aspect-ratio:1/1; border-radius:12px; position:relative; overflow:hidden;
+    display:flex; align-items:flex-end; padding:14px;
+    border:1px solid rgba(255,255,255,0.08);
+  }
+  .foto-placeholder span{position:relative; font-size:12.5px; font-weight:700; color:#0A1428; background:var(--giallo); padding:4px 9px; border-radius:6px;}
+  .foto-placeholder:nth-child(4n+1){background:repeating-linear-gradient(45deg, #14336E 0 10px, #0F2757 10px 20px);}
+  .foto-placeholder:nth-child(4n+2){background:repeating-linear-gradient(-45deg, #1857C4 0 10px, #123E93 10px 20px);}
+  .foto-placeholder:nth-child(4n+3){background:radial-gradient(circle at 30% 30%, #FFD100 0%, #C7A100 45%, #14336E 46%, #0F2757 100%);}
+  .foto-placeholder:nth-child(4n+4){background:repeating-linear-gradient(90deg, #0F2757 0 8px, #14336E 8px 22px);}
+  .galleria-nota{margin-top:26px; color:#8FA0C4; font-size:14.5px;}
+  .foto-reale{aspect-ratio:1/1; border-radius:12px; overflow:hidden; position:relative;}
+  .foto-reale img{width:100%; height:100%; object-fit:cover;}
+  .foto-reale span{
+    position:absolute; left:10px; bottom:10px; background:rgba(7,26,61,0.85); color:var(--bianco);
+    font-size:12px; font-weight:600; padding:4px 9px; border-radius:6px;
+  }
+
+  /* ---------- VIDEO ---------- */
+  .video-sezione{background:var(--panna);}
+  .video-griglia{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
+  @media (max-width:880px){.video-griglia{grid-template-columns:1fr;}}
+  .video-card{background:var(--bianco); border:1px solid var(--riga); border-radius:var(--radius); overflow:hidden;}
+  .video-schermo{
+    aspect-ratio:16/9; background:linear-gradient(135deg,#14336E,#0B2F6B); position:relative;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .play-btn{
+    width:56px; height:56px; border-radius:50%; background:var(--giallo);
+    display:flex; align-items:center; justify-content:center; box-shadow:0 6px 18px rgba(0,0,0,0.25);
+  }
+  .play-btn::after{content:""; border-style:solid; border-width:9px 0 9px 15px; border-color:transparent transparent transparent var(--blu-notte); margin-left:4px;}
+  .video-schermo-reale{background:#000;}
+  .video-schermo-reale iframe{width:100%; height:100%; border:0;}
+  .video-card .testo{padding:16px 18px;}
+  .video-card h3{text-transform:none; letter-spacing:0; font-size:16px; margin:0 0 4px; color:var(--blu-notte);}
+  .video-card p{margin:0; font-size:13.5px; color:var(--testo-chiaro);}
+
+  /* ---------- ELENCO ATLETE ---------- */
+  .elenco{background:var(--bianco);}
+  .elenco-griglia{display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:18px;}
+  .atleta-card{
+    border:1px solid var(--riga); border-radius:var(--radius); padding:22px; text-align:center;
+    transition:border-color .15s, transform .15s;
+  }
+  .atleta-card:hover{border-color:var(--blu-acceso); transform:translateY(-3px);}
+  .numero-maglia{
+    width:64px; height:64px; margin:0 auto 14px; border-radius:50%;
+    background:var(--blu-notte); color:var(--giallo);
+    display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:700;
+    border:3px solid var(--giallo);
+  }
+  .atleta-card h3{font-size:16px; text-transform:none; letter-spacing:0; margin:0 0 4px; color:var(--blu-notte);}
+  .atleta-card .ruolo{font-size:12.5px; color:var(--blu-acceso); font-weight:700; text-transform:uppercase; letter-spacing:.03em;}
+
+  /* ---------- CONTATTI / FOOTER ---------- */
+  footer{background:var(--blu-notte); color:#B9C3DC; padding:64px 0 28px;}
+  .footer-griglia{display:grid; grid-template-columns:1.3fr 1fr 1fr; gap:40px; margin-bottom:44px;}
+  @media (max-width:760px){.footer-griglia{grid-template-columns:1fr;}}
+  footer h4{color:var(--bianco); font-size:14px; letter-spacing:.03em; margin:0 0 16px;}
+  footer p, footer a{font-size:14.5px; line-height:1.9;}
+  footer a{text-decoration:none;}
+  footer a:hover{color:var(--giallo);}
+  .footer-basso{border-top:1px solid #17264A; padding-top:22px; font-size:13px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;}
+
+  .skip-link{position:absolute; left:-999px; top:0; background:var(--giallo); color:var(--blu-notte); padding:10px 16px; z-index:100; font-weight:700;}
+  .skip-link:focus{left:10px; top:10px;}
+  :focus-visible{outline:3px solid var(--giallo); outline-offset:2px;}
+  @media (prefers-reduced-motion: reduce){ *{scroll-behavior:auto !important; transition:none !important;} }
+</style>
+</head>
+<body>
+
+<a href="#contenuto" class="skip-link">Vai al contenuto</a>
+
+<header>
+  <div class="nav">
+    <a href="#" class="logo">
+      <span class="logo-badge" id="logoBadge">K2</span>
+      <span class="logo-testo">ASD US K2<span>Pallavolo</span></span>
+    </a>
+    <button class="menu-btn" id="menuBtn" aria-label="Apri il menu" aria-expanded="false">☰</button>
+    <nav class="links" id="menuLinks">
+      <a href="#notizie">Notizie</a>
+      <a href="#calendario">Calendario</a>
+      <a href="#risultati">Risultati</a>
+      <a href="#galleria">Galleria</a>
+      <a href="#video">Video</a>
+      <a href="#elenco">Elenco atlete</a>
+      <a href="#contatti">Contatti</a>
+    </nav>
+  </div>
+</header>
+
+<main id="contenuto">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-eyebrow">Stagione 2026/2027 in arrivo</div>
+      <div class="hero-riga">
+        <div>
+          <h1>ASD US K2<br><em>Pallavolo</em></h1>
+          <p class="sub">Il punto di riferimento per atlete, famiglie e tifosi: calendario partite, risultati, classifica, foto e video della squadra, tutto in un solo posto.</p>
+          <div class="cta-riga">
+            <a href="#calendario" class="btn btn-primario">Vedi il calendario</a>
+            <a href="#risultati" class="btn btn-secondario">Ultimi risultati</a>
+          </div>
+        </div>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><b id="statPartite">—</b><span>Partite in calendario</span></div>
+        <div class="stat"><b id="statAtlete">—</b><span>Atlete in rosa</span></div>
+        <div class="stat"><b id="statPosizione">—</b><span>Posizione in classifica</span></div>
+        <div class="stat"><b>26/27</b><span>Stagione in corso</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NOTIZIE -->
+  <section class="notizie" id="notizie">
+    <div class="wrap">
+      <div class="intestazione">
+        <div class="tag">Notizie e avvisi</div>
+        <h2>Sempre aggiornati</h2>
+        <p>Comunicazioni per atlete e genitori: orari, convocazioni e novità della squadra.</p>
+      </div>
+      <div class="notizie-lista" id="listaNotizie"></div>
+    </div>
+  </section>
+
+  <!-- CALENDARIO -->
+  <section class="calendario" id="calendario">
+    <div class="wrap">
+      <div class="intestazione-riga">
+        <div class="intestazione">
+          <div class="tag">Calendario</div>
+          <h2>Prossime partite</h2>
+          <p>Date, orari e sede degli incontri di campionato e amichevoli.</p>
+        </div>
+      </div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>Giorno</th><th>Data</th><th>Avversario</th><th>Tipo</th><th>Orario</th><th>Luogo</th></tr>
+          </thead>
+          <tbody id="corpoCalendario"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- RISULTATI E CLASSIFICA -->
+  <section class="risultati" id="risultati">
+    <div class="wrap">
+      <div class="intestazione">
+        <div class="tag">Risultati e classifica</div>
+        <h2>Come sta andando la squadra</h2>
+        <p>Gli ultimi risultati e la posizione aggiornata in classifica.</p>
+      </div>
+      <div class="griglia-doppia">
+        <div>
+          <h3 style="text-transform:none; letter-spacing:0; color:var(--blu-notte); font-size:18px; margin-bottom:16px;">Ultimi risultati</h3>
+          <div id="listaRisultati"></div>
+        </div>
+        <div>
+          <h3 style="text-transform:none; letter-spacing:0; color:var(--blu-notte); font-size:18px; margin-bottom:16px;">Classifica</h3>
+          <div class="table-scroll">
+            <table class="classifica-tabella">
+              <thead><tr><th>#</th><th>Squadra</th><th>G</th><th>V</th><th>P</th><th>Punti</th></tr></thead>
+              <tbody id="corpoClassifica"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALLERIA -->
+  <section class="galleria" id="galleria">
+    <div class="wrap">
+      <div class="intestazione">
+        <div class="tag">Galleria foto</div>
+        <h2>I momenti della squadra</h2>
+        <p>Allenamenti, partite ed eventi: le foto della stagione 2026/2027 arriveranno qui appena disponibili.</p>
+      </div>
+      <div class="galleria-griglia" id="grigliaGalleria"></div>
+      <p class="galleria-nota">Le atlete e i genitori potranno consultare qui le foto ufficiali non appena la stagione avrà inizio.</p>
+    </div>
+  </section>
+
+  <!-- VIDEO -->
+  <section class="video-sezione" id="video">
+    <div class="wrap">
+      <div class="intestazione">
+        <div class="tag">Video</div>
+        <h2>Azioni e highlights</h2>
+        <p>Le clip delle partite e degli allenamenti saranno pubblicate qui durante la stagione.</p>
+      </div>
+      <div class="video-griglia" id="grigliaVideo"></div>
+    </div>
+  </section>
+
+  <!-- ELENCO ATLETE -->
+  <section class="elenco" id="elenco">
+    <div class="wrap">
+      <div class="intestazione">
+        <div class="tag">Elenco atlete</div>
+        <h2>La rosa 2026/2027</h2>
+        <p>Numero di maglia, nome e ruolo di ogni atleta della squadra.</p>
+      </div>
+      <div class="elenco-griglia" id="grigliaElenco"></div>
+    </div>
+  </section>
+
+</main>
+
+<footer id="contatti">
+  <div class="wrap">
+    <div class="footer-griglia">
+      <div>
+        <h4>ASD US K2 — Pallavolo</h4>
+        <p>Il sito ufficiale della squadra per atlete, genitori e tifosi. Calendario, risultati e novità sempre aggiornati.</p>
+      </div>
+      <div>
+        <h4>Contatti</h4>
+        <p><a href="mailto:info@asdusk2.it">info@asdusk2.it</a><br>
+        <a href="tel:+390000000000">+39 000 000 0000</a></p>
+      </div>
+      <div>
+        <h4>Sezioni</h4>
+        <p><a href="#calendario">Calendario</a><br>
+        <a href="#risultati">Risultati e classifica</a><br>
+        <a href="#elenco">Elenco atlete</a></p>
+      </div>
+    </div>
+    <div class="footer-basso">
+      <span>© 2026 ASD US K2 — Tutti i diritti riservati</span>
+      <span>Sito realizzato per la stagione 2026/2027</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* =====================================================================
+   MODIFICA QUI I DATI DELLA TUA SQUADRA
+   Cambia solo il testo tra virgolette " ". Non toccare il resto del codice.
+   ===================================================================== */
+
+// --- NOTIZIE / AVVISI ---
+const notizie = [
+  { data: "Presto online", titolo: "Iscrizioni aperte 2026/2027", testo: "Le iscrizioni per la nuova stagione sono aperte. Contattate la società per informazioni.", evidenza: true },
+  { data: "Da definire", titolo: "Inizio allenamenti", testo: "La data di inizio degli allenamenti verrà comunicata a breve su questa pagina.", evidenza: false },
+  { data: "Da definire", titolo: "Presentazione della rosa", testo: "A breve la presentazione ufficiale delle atlete e dello staff tecnico.", evidenza: false }
+];
+
+// --- CALENDARIO PARTITE ---
+// tipo: "Campionato" oppure "Amichevole"
+// casa: true = in casa, false = trasferta
+const calendario = [
+  { giorno: "Da definire", data: "—", avversario: "Calendario in aggiornamento", tipo: "Campionato", orario: "—", luogo: "—", casa: true }
+];
+
+// --- ULTIMI RISULTATI ---
+// esito: "V" (vittoria) oppure "P" (sconfitta)
+const risultati = [
+  // Esempio da compilare quando iniziano le partite:
+  // { esito: "V", avversario: "Nome Squadra", quando: "12 ottobre 2026", punteggio: "3-1" }
+];
+
+// --- CLASSIFICA ---
+const classifica = [
+  // Esempio: { pos: 1, squadra: "ASD US K2", g: 0, v: 0, p: 0, punti: 0, noi: true }
+];
+
+// --- ELENCO ATLETE ---
+// Aggiungete una riga per ogni atleta della rosa
+const atlete = [
+  // Esempio: { numero: 4, nome: "Nome Cognome", ruolo: "Schiacciatrice" }
+];
+
+// --- VIDEO ---
+// Per aggiungere un video di YouTube: incollate SOLO l'ID del video
+// (nel link youtube.com/watch?v=ABC123, l'ID è "ABC123") nel campo youtubeId.
+// Se lasciate youtubeId: "" , apparirà un riquadro "in arrivo".
+const video = [
+  { titolo: "Highlights partita", descrizione: "I video della stagione saranno pubblicati qui.", youtubeId: "" },
+  { titolo: "Allenamenti", descrizione: "Contenuti in arrivo con l'inizio della stagione.", youtubeId: "" },
+  { titolo: "Interviste", descrizione: "Contenuti in arrivo con l'inizio della stagione.", youtubeId: "" }
+];
+
+// --- GALLERIA FOTO ---
+// Mettete i file delle foto nella cartella "fotos" (create questa cartella
+// nel repository accanto a index.html) e scrivete qui solo il nome del file.
+// Se lasciate l'elenco vuoto, appariranno i riquadri decorativi provvisori.
+const galleriaFoto = [
+  // Esempio: { file: "fotos/allenamento1.jpg", didascalia: "Allenamento di settembre" }
+];
+const numeroFotoGalleria = 8; // usato solo se galleriaFoto è vuoto
+
+// --- LOGO DELLA SQUADRA ---
+// Mettete il file del logo nella cartella "logo" (create questa cartella
+// nel repository accanto a index.html) e scrivete qui il nome del file.
+// Lasciate vuoto ("") per continuare a usare il badge "K2" con le iniziali.
+const logoFile = "";
+
+/* =====================================================================
+   Da qui in poi il codice costruisce automaticamente le sezioni.
+   Non è necessario modificare nulla oltre questo punto.
+   ===================================================================== */
+
+const listaNotizie = document.getElementById('listaNotizie');
+notizie.forEach(n => {
+  const div = document.createElement('div');
+  div.className = 'notizia' + (n.evidenza ? ' evidenza' : '');
+  div.innerHTML = `<div class="data">${n.data}</div><h3>${n.titolo}</h3><p>${n.testo}</p>`;
+  listaNotizie.appendChild(div);
+});
+
+const corpoCalendario = document.getElementById('corpoCalendario');
+if(calendario.length === 0){
+  corpoCalendario.innerHTML = `<tr><td colspan="6">Il calendario sarà pubblicato a breve.</td></tr>`;
+} else {
+  calendario.forEach(m => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td><span class="giorno-pill">${m.giorno}</span></td>
+      <td>${m.data}</td><td>${m.avversario}</td><td>${m.tipo}</td><td>${m.orario}</td>
+      <td>${m.luogo} <span class="badge ${m.casa ? 'badge-casa' : 'badge-trasferta'}">${m.casa ? 'Casa' : 'Trasferta'}</span></td>`;
+    corpoCalendario.appendChild(tr);
+  });
+}
+
+const listaRisultati = document.getElementById('listaRisultati');
+if(risultati.length === 0){
+  listaRisultati.innerHTML = `<p style="color:var(--testo-chiaro); font-size:14.5px;">I risultati verranno pubblicati non appena inizierà il campionato.</p>`;
+} else {
+  risultati.forEach(r => {
+    const div = document.createElement('div');
+    div.className = 'risultato-card';
+    div.innerHTML = `<div class="chi">
+        <div class="esito ${r.esito === 'V' ? 'v' : 'p'}">${r.esito}</div>
+        <div><div class="avversario">${r.avversario}</div><div class="quando">${r.quando}</div></div>
+      </div><div class="punteggio">${r.punteggio}</div>`;
+    listaRisultati.appendChild(div);
+  });
+}
+
+const corpoClassifica = document.getElementById('corpoClassifica');
+if(classifica.length === 0){
+  corpoClassifica.innerHTML = `<tr><td colspan="6">La classifica sarà disponibile con l'inizio del campionato.</td></tr>`;
+} else {
+  classifica.forEach(c => {
+    const tr = document.createElement('tr');
+    if(c.noi) tr.className = 'riga-k2';
+    tr.innerHTML = `<td>${c.pos}</td><td>${c.squadra}</td><td>${c.g}</td><td>${c.v}</td><td>${c.p}</td><td><strong>${c.punti}</strong></td>`;
+    corpoClassifica.appendChild(tr);
+  });
+}
+
+const grigliaGalleria = document.getElementById('grigliaGalleria');
+if(galleriaFoto.length === 0){
+  for(let i=0; i<numeroFotoGalleria; i++){
+    const div = document.createElement('div');
+    div.className = 'foto-placeholder';
+    div.innerHTML = `<span>Stagione 26/27</span>`;
+    grigliaGalleria.appendChild(div);
+  }
+} else {
+  galleriaFoto.forEach(f => {
+    const div = document.createElement('div');
+    div.className = 'foto-reale';
+    div.innerHTML = `<img src="${f.file}" alt="${f.didascalia || 'Foto ASD US K2'}" loading="lazy">
+      ${f.didascalia ? `<span>${f.didascalia}</span>` : ''}`;
+    grigliaGalleria.appendChild(div);
+  });
+}
+
+const grigliaVideo = document.getElementById('grigliaVideo');
+video.forEach(v => {
+  const div = document.createElement('div');
+  div.className = 'video-card';
+  if(v.youtubeId){
+    div.innerHTML = `<div class="video-schermo video-schermo-reale">
+        <iframe src="https://www.youtube.com/embed/${v.youtubeId}" title="${v.titolo}"
+          frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen loading="lazy"></iframe>
+      </div>
+      <div class="testo"><h3>${v.titolo}</h3><p>${v.descrizione}</p></div>`;
+  } else {
+    div.innerHTML = `<div class="video-schermo"><div class="play-btn"></div></div>
+      <div class="testo"><h3>${v.titolo}</h3><p>${v.descrizione}</p></div>`;
+  }
+  grigliaVideo.appendChild(div);
+});
+
+// Logo personalizzato (se presente)
+if(logoFile){
+  document.getElementById('logoBadge').innerHTML = `<img src="${logoFile}" alt="Logo ASD US K2">`;
+}
+
+const grigliaElenco = document.getElementById('grigliaElenco');
+if(atlete.length === 0){
+  grigliaElenco.innerHTML = `<p style="color:var(--testo-chiaro); grid-column:1/-1;">La rosa della stagione 2026/2027 sarà pubblicata a breve.</p>`;
+} else {
+  atlete.forEach(a => {
+    const div = document.createElement('div');
+    div.className = 'atleta-card';
+    div.innerHTML = `<div class="numero-maglia">${a.numero}</div><h3>${a.nome}</h3><div class="ruolo">${a.ruolo}</div>`;
+    grigliaElenco.appendChild(div);
+  });
+}
+
+// Statistiche rapide nell'hero
+document.getElementById('statPartite').textContent = calendario.length && calendario[0].data !== '—' ? calendario.length : '—';
+document.getElementById('statAtlete').textContent = atlete.length || '—';
+document.getElementById('statPosizione').textContent = classifica.length ? (classifica.find(c=>c.noi)?.pos ?? '—') : '—';
+
+// Menu mobile
+const menuBtn = document.getElementById('menuBtn');
+const menuLinks = document.getElementById('menuLinks');
+menuBtn.addEventListener('click', () => {
+  const aperto = menuLinks.classList.toggle('aperto');
+  menuBtn.setAttribute('aria-expanded', aperto);
+});
+menuLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  menuLinks.classList.remove('aperto');
+  menuBtn.setAttribute('aria-expanded','false');
+}));
+</script>
+</body>
+</html>
