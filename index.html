@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ASD US K2 — Pallavolo Femminile U14</title>
-<meta name="description" content="Sito ufficiale ASD US K2, squadra di pallavolo. Calendario, risultati, classifica, elenco delle atlete, foto e video della stagione 2026/2027.">
+<meta name="description" content="Sito ufficiale ASD US K2, squadra di pallavolo. Calendario, risultati, classifica, elenco atlete, foto e video della stagione 2026/2027.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -143,19 +143,51 @@
 
   /* ---------- NOTIZIE ---------- */
   .notizie{background:var(--bianco);}
-  .notizie-lista{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
-  @media (max-width:880px){.notizie-lista{grid-template-columns:1fr;}}
+  .ticker-notizie{
+    overflow:hidden; position:relative;
+    -webkit-mask-image:linear-gradient(90deg, transparent, black 48px, black calc(100% - 48px), transparent);
+    mask-image:linear-gradient(90deg, transparent, black 48px, black calc(100% - 48px), transparent);
+  }
+  .ticker-track{display:flex; gap:22px; width:max-content; animation:scorriNotizie 36s linear infinite;}
+  .ticker-notizie:hover .ticker-track, .ticker-notizie:focus-within .ticker-track{animation-play-state:paused;}
+  @keyframes scorriNotizie{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+  @media (prefers-reduced-motion: reduce){ .ticker-track{animation:none;} }
   .notizia{
     border:1px solid var(--riga); border-radius:var(--radius); padding:24px;
     background:var(--panna); position:relative;
+    flex:0 0 320px; cursor:pointer; text-align:left;
+    font-family:inherit; transition:border-color .15s, transform .15s;
   }
+  .notizia:hover, .notizia:focus-visible{border-color:var(--blu-acceso); transform:translateY(-2px);}
   .notizia .data{font-weight:700; color:var(--blu-acceso); font-size:13px; letter-spacing:.02em;}
   .notizia h3{font-size:19px; text-transform:none; letter-spacing:0; margin:10px 0 8px; color:var(--blu-notte);}
   .notizia p{color:var(--testo-chiaro); font-size:14.5px; margin:0;}
+  .notizia .leggi{display:inline-block; margin-top:12px; font-size:13px; font-weight:700; color:var(--blu-acceso);}
   .notizia.evidenza{background:var(--blu-notte); border-color:var(--blu-notte); color:var(--bianco);}
   .notizia.evidenza .data{color:var(--giallo);}
   .notizia.evidenza h3{color:var(--bianco);}
   .notizia.evidenza p{color:#B9C3DC;}
+  .notizia.evidenza .leggi{color:var(--giallo);}
+
+  /* ---------- MODALE NOTIZIA ---------- */
+  .notizia-modal{position:fixed; inset:0; z-index:200; display:none;}
+  .notizia-modal.aperta{display:block;}
+  .notizia-modal-overlay{position:absolute; inset:0; background:rgba(7,20,40,0.6); backdrop-filter:blur(2px);}
+  .notizia-modal-box{
+    position:relative; z-index:1; background:var(--bianco); max-width:560px; width:calc(100% - 40px);
+    margin:10vh auto 0; border-radius:var(--radius); padding:32px; max-height:76vh; overflow-y:auto;
+    box-shadow:0 20px 60px rgba(0,0,0,0.3);
+  }
+  .notizia-modal-chiudi{
+    position:absolute; top:16px; right:16px; width:34px; height:34px; border-radius:50%;
+    border:1px solid var(--riga); background:var(--panna); color:var(--testo); font-size:16px;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .notizia-modal-chiudi:hover{background:var(--riga);}
+  .notizia-modal-box .data{font-weight:700; color:var(--blu-acceso); font-size:13px; letter-spacing:.02em;}
+  .notizia-modal-box h3{font-size:24px; text-transform:none; letter-spacing:0; margin:10px 0 14px; color:var(--blu-notte);}
+  .notizia-modal-box p{color:var(--testo); font-size:15.5px; line-height:1.7; white-space:pre-line;}
+  @media (max-width:640px){ .notizia-modal-box{margin-top:6vh; padding:24px;} }
 
   /* ---------- CALENDARIO ---------- */
   .calendario{background:var(--panna);}
@@ -174,6 +206,8 @@
   .badge{display:inline-block; font-size:12px; font-weight:700; padding:4px 10px; border-radius:6px;}
   .badge-casa{background:#E8F0FF; color:var(--blu-acceso);}
   .badge-trasferta{background:#FFF3D6; color:#8A6400;}
+  .luogo-link{color:var(--blu-acceso); font-weight:600; text-decoration:none; border-bottom:1px solid currentColor;}
+  .luogo-link:hover{color:var(--blu-notte);}
   .table-scroll{overflow-x:auto;}
   @media (max-width:760px){ table{min-width:640px;} }
 
@@ -304,10 +338,10 @@
   <!-- HERO -->
   <section class="hero">
     <div class="wrap">
-      <div class="hero-eyebrow">Stagione 2026/2027</div>
+      <div class="hero-eyebrow">Stagione 2026/2027 in arrivo</div>
       <div class="hero-riga">
         <div>
-          <h1>ASD US K2<br><em> Femminile (U14)</em></h1>
+          <h1>ASD US K2<br><em>Pallavolo</em></h1>
           <p class="sub">Il punto di riferimento per atlete, famiglie e tifosi: calendario partite, risultati, classifica, foto e video della squadra, tutto in un solo posto.</p>
           <div class="cta-riga">
             <a href="#calendario" class="btn btn-primario">Vedi il calendario</a>
@@ -332,7 +366,9 @@
         <h2>Sempre aggiornati</h2>
         <p>Comunicazioni per atlete e genitori: orari, convocazioni e novità della squadra.</p>
       </div>
-      <div class="notizie-lista" id="listaNotizie"></div>
+      <div class="ticker-notizie">
+        <div class="ticker-track" id="listaNotizie"></div>
+      </div>
     </div>
   </section>
 
@@ -389,7 +425,7 @@
       <div class="intestazione">
         <div class="tag">Galleria foto</div>
         <h2>I momenti della squadra</h2>
-        <p>Allenamenti, partite ed eventi: le foto della stagione 2026/2027 arriveranno qui non appena saranno disponibili.</p>
+        <p>Allenamenti, partite ed eventi: le foto della stagione 2026/2027 arriveranno qui appena disponibili.</p>
       </div>
       <div class="galleria-griglia" id="grigliaGalleria"></div>
       <p class="galleria-nota">Le atlete e i genitori potranno consultare qui le foto ufficiali non appena la stagione avrà inizio.</p>
@@ -426,7 +462,7 @@
   <div class="wrap">
     <div class="footer-griglia">
       <div>
-        <h4>ASD US K2 — Pallavolo (U14)</h4>
+        <h4>ASD US K2 — Pallavolo</h4>
         <p>Il sito ufficiale della squadra per atlete, genitori e tifosi. Calendario, risultati e novità sempre aggiornati.</p>
       </div>
       <div>
@@ -448,7 +484,6 @@
   </div>
 </footer>
 
-
 <div class="notizia-modal" id="notiziaModal" aria-hidden="true">
   <div class="notizia-modal-overlay" id="notiziaModalOverlay"></div>
   <div class="notizia-modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitolo">
@@ -459,7 +494,6 @@
   </div>
 </div>
 
-  
 <script>
 /* =====================================================================
    MODIFICA QUI I DATI DELLA TUA SQUADRA
@@ -471,11 +505,10 @@
 // testoCompleto: texto completo que aparece quando alguém clica na notícia
 //   (se deixar "", vai mostrar o mesmo texto curto).
 const notizie = [
-  { data: "14/09/2026", titolo: "Allenamento", testo: "🟡💙 Si ricomincia! 💙🟡, Le nostre ragazze sono pronte a tornare in campo!.....💙💛🏆😊.", testoCompleto: "🟡💙 Si ricomincia! 💙🟡, Le nostre ragazze sono pronte a tornare in campo!.📍Gli allenamenti riprenderanno presso Omni dalle 18:30 alle 20:30,salvo eventuali cambiamenti. Forza K2 U14! Le future campionesse sono tornate! 💙💛🏆😊.", evidenza: true },
-  { data: "20/09/2026", titolo: "📢 Grigliata di Inizio Stagione 2026/2027! 🍖🔥", testo: "Finalmente si parte! Prima di tuffarci in allenamenti, partite, schiacciate e qualche tuffo spettacolare (più o meno volontario 😄), è arrivato il momento di ritrovarci per una bella grigliata di squadra!.", testoCompleto:"", evidenza: false },
-  { data: "20/09/2026", titolo: "Comune di San Donato Milanese", testo: "Domenica 20 settembre la città festeggia il Patrono. Processione con arrivo nella chiesa nuova dove sarà celebrata la santa messa alle ore 10.30 e presentazione dei lavori di restauro che stanno interessando la Pieve alle ore 17.30 ",testoCompleto:"", evidenza: true }
+  { data: "Presto online", titolo: "Iscrizioni aperte 2026/2027", testo: "Le iscrizioni per la nuova stagione sono aperte. Contattate la società per informazioni.", testoCompleto: "", evidenza: true },
+  { data: "Da definire", titolo: "Inizio allenamenti", testo: "La data di inizio degli allenamenti verrà comunicata a breve su questa pagina.", testoCompleto: "", evidenza: false },
+  { data: "Da definire", titolo: "Presentazione della rosa", testo: "A breve la presentazione ufficiale delle atlete e dello staff tecnico.", testoCompleto: "", evidenza: false }
 ];
-
 // --- CALENDARIO PARTITE ---
 // tipo: "Campionato" oppure "Amichevole"
 // casa: true = in casa, false = trasferta
@@ -551,18 +584,40 @@ const numeroFotoGalleria = 8; // usato solo se galleriaFoto è vuoto
 // Lasciate vuoto ("") per continuare a usare il badge "K2" con le iniziali.
 const logoFile = "/Logo.jpg";
 
-/* =====================================================================
-   Da qui in poi il codice costruisce automaticamente le sezioni.
-   Non è necessario modificare nulla oltre questo punto.
-   ===================================================================== */
-
 const listaNotizie = document.getElementById('listaNotizie');
-notizie.forEach(n => {
-  const div = document.createElement('div');
+function creaCardNotizia(n, indice){
+  const div = document.createElement('button');
+  div.type = 'button';
   div.className = 'notizia' + (n.evidenza ? ' evidenza' : '');
-  div.innerHTML = `<div class="data">${n.data}</div><h3>${n.titolo}</h3><p>${n.testo}</p>`;
-  listaNotizie.appendChild(div);
-});
+  div.innerHTML = `<div class="data">${n.data}</div><h3>${n.titolo}</h3><p>${n.testo}</p><span class="leggi">Leggi tutto →</span>`;
+  div.addEventListener('click', () => apriNotizia(indice));
+  return div;
+}
+if(notizie.length > 0){
+  // La lista viene duplicata due volte per creare l'effetto di scorrimento continuo (loop).
+  notizie.forEach((n, i) => listaNotizie.appendChild(creaCardNotizia(n, i)));
+  notizie.forEach((n, i) => listaNotizie.appendChild(creaCardNotizia(n, i)));
+}
+
+const notiziaModal = document.getElementById('notiziaModal');
+const notiziaModalOverlay = document.getElementById('notiziaModalOverlay');
+const notiziaModalChiudi = document.getElementById('notiziaModalChiudi');
+function apriNotizia(indice){
+  const n = notizie[indice];
+  document.getElementById('modalData').textContent = n.data;
+  document.getElementById('modalTitolo').textContent = n.titolo;
+  document.getElementById('modalTesto').textContent = n.testoCompleto && n.testoCompleto.trim() !== '' ? n.testoCompleto : n.testo;
+  notiziaModal.classList.add('aperta');
+  notiziaModal.setAttribute('aria-hidden', 'false');
+  notiziaModalChiudi.focus();
+}
+function chiudiNotizia(){
+  notiziaModal.classList.remove('aperta');
+  notiziaModal.setAttribute('aria-hidden', 'true');
+}
+notiziaModalOverlay.addEventListener('click', chiudiNotizia);
+notiziaModalChiudi.addEventListener('click', chiudiNotizia);
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape') chiudiNotizia(); });
 
 const corpoCalendario = document.getElementById('corpoCalendario');
 if(calendario.length === 0){
@@ -570,9 +625,12 @@ if(calendario.length === 0){
 } else {
   calendario.forEach(m => {
     const tr = document.createElement('tr');
+    const luogoHtml = m.mappaLink
+      ? `<a href="${m.mappaLink}" target="_blank" rel="noopener noreferrer" class="luogo-link">${m.luogo} ↗</a>`
+      : m.luogo;
     tr.innerHTML = `<td><span class="giorno-pill">${m.giorno}</span></td>
       <td>${m.data}</td><td>${m.avversario}</td><td>${m.tipo}</td><td>${m.orario}</td>
-      <td>${m.luogo} <span class="badge ${m.casa ? 'badge-casa' : 'badge-trasferta'}">${m.casa ? 'Casa' : 'Trasferta'}</span></td>`;
+      <td>${luogoHtml} <span class="badge ${m.casa ? 'badge-casa' : 'badge-trasferta'}">${m.casa ? 'Casa' : 'Trasferta'}</span></td>`;
     corpoCalendario.appendChild(tr);
   });
 }
