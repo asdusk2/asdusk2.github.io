@@ -448,17 +448,32 @@
   </div>
 </footer>
 
+
+<div class="notizia-modal" id="notiziaModal" aria-hidden="true">
+  <div class="notizia-modal-overlay" id="notiziaModalOverlay"></div>
+  <div class="notizia-modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitolo">
+    <button class="notizia-modal-chiudi" id="notiziaModalChiudi" aria-label="Chiudi">✕</button>
+    <div class="data" id="modalData"></div>
+    <h3 id="modalTitolo"></h3>
+    <p id="modalTesto"></p>
+  </div>
+</div>
+
+  
 <script>
 /* =====================================================================
    MODIFICA QUI I DATI DELLA TUA SQUADRA
    Cambia solo il testo tra virgolette " ". Non toccare il resto del codice.
    ===================================================================== */
 
-<!--// --- NOTIZIE / AVVISI ---
+// --- NOTIZIE / AVVISI ---
+// testo: resumo curto que aparece na faixa rolando.
+// testoCompleto: texto completo que aparece quando alguém clica na notícia
+//   (se deixar "", vai mostrar o mesmo texto curto).
 const notizie = [
-  { data: "14/09/2026", titolo: "Allenamento", testo: "🟡💙 Si ricomincia! 💙🟡, Le nostre ragazze sono pronte a tornare in campo!.📍Gli allenamenti riprenderanno presso Omni dalle 18:30 alle 20:30,salvo eventuali cambiamenti. Forza K2 U14! Le future campionesse sono tornate! 💙💛🏆😊.", evidenza: true },
-  { data: "20/09/2026", titolo: "📢 Grigliata di Inizio Stagione 2026/2027! 🍖🔥", testo: "Finalmente si parte! Prima di tuffarci in allenamenti, partite, schiacciate e qualche tuffo spettacolare (più o meno volontario 😄), è arrivato il momento di ritrovarci per una bella grigliata di squadra!.", evidenza: false },
-  { data: "20/09/2026", titolo: "Comune di San Donato Milanese", testo: "Domenica 20 settembre la città festeggia il Patrono. Processione con arrivo nella chiesa nuova dove sarà celebrata la santa messa alle ore 10.30 e presentazione dei lavori di restauro che stanno interessando la Pieve alle ore 17.30 ", evidenza: true }
+  { data: "14/09/2026", titolo: "Allenamento", testo: "🟡💙 Si ricomincia! 💙🟡, Le nostre ragazze sono pronte a tornare in campo!.....💙💛🏆😊.", testoCompleto: "🟡💙 Si ricomincia! 💙🟡, Le nostre ragazze sono pronte a tornare in campo!.📍Gli allenamenti riprenderanno presso Omni dalle 18:30 alle 20:30,salvo eventuali cambiamenti. Forza K2 U14! Le future campionesse sono tornate! 💙💛🏆😊.", evidenza: true },
+  { data: "20/09/2026", titolo: "📢 Grigliata di Inizio Stagione 2026/2027! 🍖🔥", testo: "Finalmente si parte! Prima di tuffarci in allenamenti, partite, schiacciate e qualche tuffo spettacolare (più o meno volontario 😄), è arrivato il momento di ritrovarci per una bella grigliata di squadra!.", testoCompleto:"", evidenza: false },
+  { data: "20/09/2026", titolo: "Comune di San Donato Milanese", testo: "Domenica 20 settembre la città festeggia il Patrono. Processione con arrivo nella chiesa nuova dove sarà celebrata la santa messa alle ore 10.30 e presentazione dei lavori di restauro che stanno interessando la Pieve alle ore 17.30 ",testoCompleto:"", evidenza: true }
 ];
 
 // --- CALENDARIO PARTITE ---
