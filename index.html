@@ -257,6 +257,56 @@
     font-size:12px; font-weight:600; padding:4px 9px; border-radius:6px;
   }
 
+  /* ---------- SLIDESHOW GALLERIA (cambio automatico ogni 5s) ---------- */
+  .galleria-slideshow{
+    position:relative; width:100%; max-width:640px; margin:0 auto 34px; aspect-ratio:16/9;
+    border-radius:var(--radius); overflow:hidden; border:1px solid rgba(255,255,255,0.1);
+    box-shadow:0 20px 50px rgba(0,0,0,0.35); background:#0F2757;
+  }
+  .slideshow-slide{
+    position:absolute; inset:0; opacity:0; transition:opacity .7s ease;
+    cursor:pointer; border:0; padding:0; width:100%; height:100%; background:none;
+  }
+  .slideshow-slide.attiva{opacity:1;}
+  .slideshow-slide img{width:100%; height:100%; object-fit:cover; display:block;}
+  .slideshow-slide .slideshow-info{
+    position:absolute; left:0; right:0; bottom:0; padding:16px 18px;
+    background:linear-gradient(0deg, rgba(7,20,40,0.85), rgba(7,20,40,0));
+    text-align:left;
+  }
+  .slideshow-slide .slideshow-data{color:var(--giallo); font-weight:700; font-size:12.5px; letter-spacing:.03em;}
+  .slideshow-slide .slideshow-didascalia{color:var(--bianco); font-size:14.5px; margin-top:2px;}
+  .slideshow-slide .slideshow-conta{color:#B9C3DC; font-size:12.5px; margin-top:4px;}
+  .slideshow-dots{display:flex; justify-content:center; gap:7px; margin-top:14px;}
+  .slideshow-dot{
+    width:8px; height:8px; border-radius:50%; border:0; padding:0; cursor:pointer;
+    background:rgba(255,255,255,0.3);
+  }
+  .slideshow-dot.attivo{background:var(--giallo);}
+
+  /* ---------- MODALE FOTO PER DATA ---------- */
+  .foto-modal{position:fixed; inset:0; z-index:200; display:none;}
+  .foto-modal.aperta{display:block;}
+  .foto-modal-overlay{position:absolute; inset:0; background:rgba(7,20,40,0.75); backdrop-filter:blur(2px);}
+  .foto-modal-box{
+    position:relative; z-index:1; background:var(--blu-notte); max-width:820px; width:calc(100% - 40px);
+    margin:8vh auto 0; border-radius:var(--radius); padding:32px; max-height:80vh; overflow-y:auto;
+    box-shadow:0 20px 60px rgba(0,0,0,0.4);
+  }
+  .foto-modal-chiudi{
+    position:absolute; top:16px; right:16px; width:34px; height:34px; border-radius:50%;
+    border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.08); color:var(--bianco); font-size:16px;
+    cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .foto-modal-chiudi:hover{background:rgba(255,255,255,0.18);}
+  .foto-modal-box .foto-modal-data{font-weight:700; color:var(--giallo); font-size:13px; letter-spacing:.02em;}
+  .foto-modal-box h3{font-size:22px; text-transform:none; letter-spacing:0; margin:10px 0 18px; color:var(--bianco);}
+  .foto-modal-griglia{display:grid; grid-template-columns:repeat(3,1fr); gap:12px;}
+  @media (max-width:640px){
+    .foto-modal-box{margin-top:6vh; padding:24px;}
+    .foto-modal-griglia{grid-template-columns:repeat(2,1fr);}
+  }
+
   /* ---------- VIDEO ---------- */
   .video-sezione{background:var(--panna);}
   .video-griglia{display:grid; grid-template-columns:repeat(3,1fr); gap:22px;}
@@ -427,10 +477,23 @@
         <h2>I momenti della squadra</h2>
         <p>Allenamenti, partite ed eventi: le foto della stagione 2026/2027 arriveranno qui appena disponibili.</p>
       </div>
+      <div class="galleria-slideshow" id="galleriaSlideshow" style="display:none;"></div>
+      <div class="slideshow-dots" id="slideshowDots" style="display:none;"></div>
       <div class="galleria-griglia" id="grigliaGalleria"></div>
       <p class="galleria-nota">Le atlete e i genitori potranno consultare qui le foto ufficiali non appena la stagione avrà inizio.</p>
     </div>
   </section>
+
+  <!-- MODALE FOTO PER DATA -->
+  <div class="foto-modal" id="fotoModal" aria-hidden="true">
+    <div class="foto-modal-overlay" id="fotoModalOverlay"></div>
+    <div class="foto-modal-box" role="dialog" aria-modal="true" aria-labelledby="fotoModalTitolo">
+      <button class="foto-modal-chiudi" id="fotoModalChiudi" aria-label="Chiudi">✕</button>
+      <div class="foto-modal-data" id="fotoModalData"></div>
+      <h3 id="fotoModalTitolo">Foto di questa data</h3>
+      <div class="foto-modal-griglia" id="fotoModalGriglia"></div>
+    </div>
+  </div>
 
   <!-- VIDEO -->
   <section class="video-sezione" id="video">
@@ -574,8 +637,18 @@ const video = [
 // Mettete i file delle foto nella cartella "fotos" (create questa cartella
 // nel repository accanto a index.html) e scrivete qui solo il nome del file.
 // Se lasciate l'elenco vuoto, appariranno i riquadri decorativi provvisori.
+//
+// Campo "data": scrivete la stessa data (es. "2026-09-20") su tutte le foto
+// dello stesso evento/allenamento: verranno raggruppate insieme nello slideshow
+// automatico in cima alla galleria (cambia foto ogni 5 secondi) e, cliccando
+// sulla foto dello slideshow, si aprirà una finestra con tutte le foto di quella data.
+// Campo "dataLabel": testo mostrato all'utente per quella data (es. "20 Settembre 2026").
+// Se lasciate "data" vuoto, la foto non farà parte del raggruppamento per data.
 const galleriaFoto = [
-  // Esempio: { file: "fotos/allenamento1.jpg", didascalia: "Allenamento di settembre" }
+  // Esempio:
+  // { file: "fotos/allenamento1.jpg", didascalia: "Riscaldamento", data: "2026-09-20", dataLabel: "20 Settembre 2026" },
+  // { file: "fotos/allenamento2.jpg", didascalia: "Esercizi di squadra", data: "2026-09-20", dataLabel: "20 Settembre 2026" },
+  // { file: "fotos/partita1.jpg", didascalia: "Primo punto", data: "2026-09-27", dataLabel: "27 Settembre 2026" }
 ];
 const numeroFotoGalleria = 8; // usato solo se galleriaFoto è vuoto
 
@@ -679,6 +752,93 @@ if(galleriaFoto.length === 0){
       ${f.didascalia ? `<span>${f.didascalia}</span>` : ''}`;
     grigliaGalleria.appendChild(div);
   });
+}
+
+// --- SLIDESHOW AUTOMATICO (una foto per data, cambia ogni 5 secondi) ---
+// Raggruppa le foto per "data": ogni gruppo mostra la sua prima foto come copertina.
+const gruppiPerData = [];
+galleriaFoto.forEach(f => {
+  const chiave = f.data && f.data.trim() !== '' ? f.data : `__singola-${gruppiPerData.length}`;
+  let gruppo = gruppiPerData.find(g => g.chiave === chiave);
+  if(!gruppo){
+    gruppo = { chiave, dataLabel: f.dataLabel || f.data || '', foto: [] };
+    gruppiPerData.push(gruppo);
+  }
+  gruppo.foto.push(f);
+});
+
+const galleriaSlideshow = document.getElementById('galleriaSlideshow');
+const slideshowDots = document.getElementById('slideshowDots');
+const fotoModal = document.getElementById('fotoModal');
+const fotoModalOverlay = document.getElementById('fotoModalOverlay');
+const fotoModalChiudi = document.getElementById('fotoModalChiudi');
+const fotoModalData = document.getElementById('fotoModalData');
+const fotoModalGriglia = document.getElementById('fotoModalGriglia');
+
+function apriFotoData(indiceGruppo){
+  const gruppo = gruppiPerData[indiceGruppo];
+  fotoModalData.textContent = gruppo.dataLabel || '';
+  fotoModalGriglia.innerHTML = '';
+  gruppo.foto.forEach(f => {
+    const div = document.createElement('div');
+    div.className = 'foto-reale';
+    div.innerHTML = `<img src="${f.file}" alt="${f.didascalia || 'Foto ASD US K2'}" loading="lazy">
+      ${f.didascalia ? `<span>${f.didascalia}</span>` : ''}`;
+    fotoModalGriglia.appendChild(div);
+  });
+  fotoModal.classList.add('aperta');
+  fotoModal.setAttribute('aria-hidden', 'false');
+  fotoModalChiudi.focus();
+}
+function chiudiFotoData(){
+  fotoModal.classList.remove('aperta');
+  fotoModal.setAttribute('aria-hidden', 'true');
+}
+fotoModalOverlay.addEventListener('click', chiudiFotoData);
+fotoModalChiudi.addEventListener('click', chiudiFotoData);
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape') chiudiFotoData(); });
+
+if(gruppiPerData.length > 0){
+  galleriaSlideshow.style.display = 'block';
+  if(gruppiPerData.length > 1) slideshowDots.style.display = 'flex';
+
+  gruppiPerData.forEach((gruppo, i) => {
+    const copertina = gruppo.foto[0];
+    const slide = document.createElement('button');
+    slide.type = 'button';
+    slide.className = 'slideshow-slide' + (i === 0 ? ' attiva' : '');
+    slide.innerHTML = `<img src="${copertina.file}" alt="${copertina.didascalia || 'Foto ASD US K2'}" loading="lazy">
+      <div class="slideshow-info">
+        ${gruppo.dataLabel ? `<div class="slideshow-data">${gruppo.dataLabel}</div>` : ''}
+        ${copertina.didascalia ? `<div class="slideshow-didascalia">${copertina.didascalia}</div>` : ''}
+        ${gruppo.foto.length > 1 ? `<div class="slideshow-conta">${gruppo.foto.length} foto in questa data — clicca per vederle tutte</div>` : ''}
+      </div>`;
+    slide.addEventListener('click', () => apriFotoData(i));
+    galleriaSlideshow.appendChild(slide);
+
+    const dot = document.createElement('button');
+    dot.type = 'button';
+    dot.className = 'slideshow-dot' + (i === 0 ? ' attivo' : '');
+    dot.setAttribute('aria-label', `Vai alla foto ${i + 1}`);
+    dot.addEventListener('click', () => mostraSlide(i));
+    slideshowDots.appendChild(dot);
+  });
+
+  const slideEls = galleriaSlideshow.querySelectorAll('.slideshow-slide');
+  const dotEls = slideshowDots.querySelectorAll('.slideshow-dot');
+  let indiceSlide = 0;
+  function mostraSlide(i){
+    slideEls[indiceSlide].classList.remove('attiva');
+    dotEls[indiceSlide] && dotEls[indiceSlide].classList.remove('attivo');
+    indiceSlide = i;
+    slideEls[indiceSlide].classList.add('attiva');
+    dotEls[indiceSlide] && dotEls[indiceSlide].classList.add('attivo');
+  }
+  if(gruppiPerData.length > 1){
+    setInterval(() => {
+      mostraSlide((indiceSlide + 1) % gruppiPerData.length);
+    }, 5000);
+  }
 }
 
 const grigliaVideo = document.getElementById('grigliaVideo');
