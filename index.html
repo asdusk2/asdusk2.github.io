@@ -189,6 +189,30 @@
   .notizia-modal-box p{color:var(--testo); font-size:15.5px; line-height:1.7; white-space:pre-line;}
   @media (max-width:640px){ .notizia-modal-box{margin-top:6vh; padding:24px;} }
 
+  /* ---------- MODALE COMPLEANNO ---------- */
+  .compleanno-modal{position:fixed; inset:0; z-index:300; display:none;}
+  .compleanno-modal.aperta{display:block;}
+  .compleanno-modal-overlay{position:absolute; inset:0; background:rgba(7,20,40,0.72); backdrop-filter:blur(3px);}
+  .compleanno-modal-box{
+    position:relative; z-index:1; background:var(--blu-notte); max-width:420px; width:calc(100% - 40px);
+    margin:6vh auto 0; border-radius:var(--radius); padding:28px; max-height:88vh; overflow-y:auto;
+    box-shadow:0 24px 70px rgba(0,0,0,0.45); border:3px solid var(--giallo); text-align:center;
+  }
+  .compleanno-modal-chiudi{
+    position:absolute; top:14px; right:14px; width:34px; height:34px; border-radius:50%;
+    border:1px solid rgba(255,209,0,0.5); background:rgba(255,255,255,0.06); color:var(--bianco); font-size:16px;
+    cursor:pointer; display:flex; align-items:center; justify-content:center; z-index:2;
+  }
+  .compleanno-modal-chiudi:hover{background:rgba(255,209,0,0.18);}
+  .compleanno-titolo{
+    color:var(--giallo); font-size:26px; margin:4px 0 18px; text-transform:none; letter-spacing:0;
+  }
+  .compleanno-modal-box img{
+    width:100%; border-radius:10px; border:2px solid rgba(255,209,0,0.35); margin-bottom:16px;
+  }
+  .compleanno-testo{color:#C9D3EA; font-size:15px; margin:0;}
+  @media (max-width:640px){ .compleanno-modal-box{margin-top:4vh; padding:22px;} }
+
   /* ---------- CALENDARIO ---------- */
   .calendario{background:var(--panna);}
   table{width:100%; border-collapse:collapse; background:var(--bianco); border-radius:var(--radius); overflow:hidden; box-shadow:0 1px 0 var(--riga);}
@@ -546,6 +570,16 @@
     </div>
   </div>
 </footer>
+
+<div class="compleanno-modal" id="compleannoModal" aria-hidden="true">
+  <div class="compleanno-modal-overlay" id="compleannoModalOverlay"></div>
+  <div class="compleanno-modal-box" role="dialog" aria-modal="true" aria-labelledby="compleannoTitolo">
+    <button class="compleanno-modal-chiudi" id="compleannoModalChiudi" aria-label="Chiudi">✕</button>
+    <h3 class="compleanno-titolo" id="compleannoTitolo">🎉 Buon Compleanno, Ginevra! 🎉</h3>
+    <img src="GINEVRA.png" alt="Buon compleanno Ginevra">
+    <p class="compleanno-testo">Tutta la famiglia ASD US K2 ti augura un fantastico compleanno! 🏐💛💙</p>
+  </div>
+</div>
 
 <div class="notizia-modal" id="notiziaModal" aria-hidden="true">
   <div class="notizia-modal-overlay" id="notiziaModalOverlay"></div>
@@ -906,6 +940,34 @@ if(atlete.length === 0){
 document.getElementById('statPartite').textContent = calendario.length && calendario[0].data !== '—' ? calendario.length : '—';
 document.getElementById('statAtlete').textContent = atlete.length || '—';
 document.getElementById('statPosizione').textContent = classifica.length ? (classifica.find(c=>c.noi)?.pos ?? '—') : '—';
+
+// --- POPUP COMPLEANNO ---
+// Per riutilizzare questo popup per un'altra atleta in futuro:
+// 1) cambiate il file immagine in "GINEVRA.png" (stesso nome o aggiornate il src qui sotto)
+// 2) cambiate il testo del titolo nell'HTML del modale "compleannoModal"
+// 3) se volete che riappaia, cambiate la chiave qui sotto (es. da "ginevra-2026" a un nuovo nome)
+const compleannoModal = document.getElementById('compleannoModal');
+const compleannoModalOverlay = document.getElementById('compleannoModalOverlay');
+const compleannoModalChiudi = document.getElementById('compleannoModalChiudi');
+const chiaveCompleanno = 'compleanno-visto-ginevra-2026';
+
+function apriCompleanno(){
+  compleannoModal.classList.add('aperta');
+  compleannoModal.setAttribute('aria-hidden', 'false');
+  compleannoModalChiudi.focus();
+}
+function chiudiCompleanno(){
+  compleannoModal.classList.remove('aperta');
+  compleannoModal.setAttribute('aria-hidden', 'true');
+  sessionStorage.setItem(chiaveCompleanno, '1');
+}
+compleannoModalOverlay.addEventListener('click', chiudiCompleanno);
+compleannoModalChiudi.addEventListener('click', chiudiCompleanno);
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape' && compleannoModal.classList.contains('aperta')) chiudiCompleanno(); });
+
+if(!sessionStorage.getItem(chiaveCompleanno)){
+  setTimeout(apriCompleanno, 600);
+}
 
 // Menu mobile
 const menuBtn = document.getElementById('menuBtn');
