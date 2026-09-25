@@ -185,7 +185,19 @@
     cursor:pointer; display:flex; align-items:center; justify-content:center;
   }
   .notizia-modal-chiudi:hover{background:var(--riga);}
-  .notizia-modal-img{width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:8px; margin-bottom:16px;}
+  .notizia-modal-img{width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:8px; margin-bottom:16px; cursor:zoom-in;}
+
+  /* ---------- LIGHTBOX (immagine a schermo intero) ---------- */
+  .lightbox{position:fixed; inset:0; z-index:400; display:none; align-items:center; justify-content:center; padding:24px;}
+  .lightbox.aperta{display:flex;}
+  .lightbox-overlay{position:absolute; inset:0; background:rgba(4,12,28,0.92);}
+  .lightbox img{position:relative; z-index:1; max-width:100%; max-height:90vh; border-radius:10px; box-shadow:0 20px 70px rgba(0,0,0,0.5);}
+  .lightbox-chiudi{
+    position:absolute; top:20px; right:20px; z-index:2; width:42px; height:42px; border-radius:50%;
+    border:1px solid rgba(255,255,255,0.3); background:rgba(255,255,255,0.1); color:var(--bianco);
+    font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+  }
+  .lightbox-chiudi:hover{background:rgba(255,255,255,0.22);}
   .notizia-modal-box .data{font-weight:700; color:var(--blu-acceso); font-size:13px; letter-spacing:.02em;}
   .notizia-modal-box h3{font-size:24px; text-transform:none; letter-spacing:0; margin:10px 0 14px; color:var(--blu-notte);}
   .notizia-modal-box p{color:var(--testo); font-size:15.5px; line-height:1.7; white-space:pre-line;}
@@ -614,7 +626,7 @@ const notizie = [
   { data: "20/09/2026", titolo: "📢 Grigliata di Inizio Stagione 2026/2027! 🍖🔥", testo: "Finalmente si parte! Prima di tuffarci in allenamenti, partite, schiacciate...", testoCompleto: "Finalmente si parte! Prima di tuffarci in allenamenti, partite, schiacciate e qualche tuffo spettacolare (più o meno volontario 😄), è arrivato il momento di ritrovarci per una bella grigliata di squadra!.", immagine: "", linkEsterno: "", evidenza: true },
  // { data: "20/09/2026", titolo: "Comune di San Donato Milanese", testo: "Domenica 20 settembre la città festeggia il Patrono.", testoCompleto: "Comune di San Donato Milanese - Domenica 20 settembre la città festeggia il Patrono. Processione con arrivo nella chiesa nuova dove sarà celebrata la santa messa alle ore 10.30 e presentazione dei lavori di restauro che stanno interessando la Pieve alle ore 17.30", immagine: "", linkEsterno: "", evidenza: false }
  // Esempio con immagine e link esterno:
-  { data: "3 e 4 ottobre 2026", titolo: "📢 Festa dell'Oratorio ", testo: "Festa dell'Oratorio a San Donato Milanese.", testoCompleto: "Buon pomeriggio a tutti, desideriamo segnalarvi che nel weekend del 3 e 4 ottobre si terrà la Festa dell'Oratorio di San Donato V. e M., che inaugurerà ufficialmente il nuovo anno oratoriano con il tema - SEI NELLA FESTA !!. Vi invitiamo a partecipare numerosi e a condividere questo momento di festa con le vostre famiglie! Di seguito trovate il programma completo dell evento. 💙🏐💛", immagine: "IMAGES/Info/PHOTO-2026-09-24-20-32-20.jpg", linkEsterno: "IMAGES/Info/PHOTO-2026-09-24-20-32-20.jpg", evidenza: true }
+  { data: "3 e 4 ottobre 2026", titolo: "📢 Festa dell'Oratorio ", testo: "Festa dell'Oratorio a San Donato Milanese.", testoCompleto: "Buon pomeriggio a tutti, desideriamo segnalarvi che nel weekend del 3 e 4 ottobre si terrà la Festa dell'Oratorio di San Donato V. e M., che inaugurerà ufficialmente il nuovo anno oratoriano con il tema - SEI NELLA FESTA !!. Vi invitiamo a partecipare numerosi e a condividere questo momento di festa con le vostre famiglie! Di seguito trovate il programma completo dell evento. 💙🏐💛", immagine: "IMAGES/Info/PHOTO-2026-09-24-20-32-20.jpg", linkEsterno: "", evidenza: true }
 
 ];
 // --- CALENDARIO PARTITE ---
@@ -757,14 +769,36 @@ if(notizie.length > 0){
 const notiziaModal = document.getElementById('notiziaModal');
 const notiziaModalOverlay = document.getElementById('notiziaModalOverlay');
 const notiziaModalChiudi = document.getElementById('notiziaModalChiudi');
+
+// --- LIGHTBOX (espande l'immagine a schermo intero al click) ---
+const lightbox = document.getElementById('lightbox');
+const lightboxImg = document.getElementById('lightboxImg');
+const lightboxOverlay = document.getElementById('lightboxOverlay');
+const lightboxChiudi = document.getElementById('lightboxChiudi');
+function apriLightbox(src, alt){
+  lightboxImg.src = src;
+  lightboxImg.alt = alt || '';
+  lightbox.classList.add('aperta');
+  lightbox.setAttribute('aria-hidden', 'false');
+}
+function chiudiLightbox(){
+  lightbox.classList.remove('aperta');
+  lightbox.setAttribute('aria-hidden', 'true');
+}
+lightboxOverlay.addEventListener('click', chiudiLightbox);
+lightboxChiudi.addEventListener('click', chiudiLightbox);
+document.addEventListener('keydown', (e) => { if(e.key === 'Escape') chiudiLightbox(); });
+
 function apriNotizia(indice){
   const n = notizie[indice];
   const modalImg = document.getElementById('modalImagem');
   if(n.immagine){
     modalImg.src = n.immagine;
     modalImg.style.display = 'block';
+    modalImg.onclick = () => apriLightbox(n.immagine, n.titolo);
   } else {
     modalImg.style.display = 'none';
+    modalImg.onclick = null;
   }
   document.getElementById('modalData').textContent = n.data;
   document.getElementById('modalTitolo').textContent = n.titolo;
@@ -1009,5 +1043,11 @@ menuLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
   menuBtn.setAttribute('aria-expanded','false');
 }));
 </script>
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <div class="lightbox-overlay" id="lightboxOverlay"></div>
+  <button class="lightbox-chiudi" id="lightboxChiudi" aria-label="Chiudi">✕</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
 </body>
 </html>
