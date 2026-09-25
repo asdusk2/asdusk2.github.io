@@ -159,6 +159,7 @@
     font-family:inherit; transition:border-color .15s, transform .15s;
   }
   .notizia:hover, .notizia:focus-visible{border-color:var(--blu-acceso); transform:translateY(-2px);}
+  .notizia-img{width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:8px; margin-bottom:12px;}
   .notizia .data{font-weight:700; color:var(--blu-acceso); font-size:13px; letter-spacing:.02em;}
   .notizia h3{font-size:19px; text-transform:none; letter-spacing:0; margin:10px 0 8px; color:var(--blu-notte);}
   .notizia p{color:var(--testo-chiaro); font-size:14.5px; margin:0;}
@@ -184,6 +185,7 @@
     cursor:pointer; display:flex; align-items:center; justify-content:center;
   }
   .notizia-modal-chiudi:hover{background:var(--riga);}
+  .notizia-modal-img{width:100%; aspect-ratio:16/9; object-fit:cover; border-radius:8px; margin-bottom:16px;}
   .notizia-modal-box .data{font-weight:700; color:var(--blu-acceso); font-size:13px; letter-spacing:.02em;}
   .notizia-modal-box h3{font-size:24px; text-transform:none; letter-spacing:0; margin:10px 0 14px; color:var(--blu-notte);}
   .notizia-modal-box p{color:var(--testo); font-size:15.5px; line-height:1.7; white-space:pre-line;}
@@ -585,6 +587,7 @@
   <div class="notizia-modal-overlay" id="notiziaModalOverlay"></div>
   <div class="notizia-modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitolo">
     <button class="notizia-modal-chiudi" id="notiziaModalChiudi" aria-label="Chiudi">✕</button>
+    <img id="modalImagem" class="notizia-modal-img" src="" alt="" style="display:none;">
     <div class="data" id="modalData"></div>
     <h3 id="modalTitolo"></h3>
     <p id="modalTesto"></p>
@@ -601,11 +604,19 @@
 // testo: resumo curto que aparece na faixa rolando.
 // testoCompleto: texto completo que aparece quando alguém clica na notícia
 //   (se deixar "", vai mostrar o mesmo texto curto).
+// immagine: link ou nome do arquivo de uma imagem para a notícia (opcional).
+//   Se deixar "", o card não mostra nenhuma imagem.
+// linkEsterno: link para uma notícia publicada em outro lugar (opcional).
+//   Se preenchido, ao clicar no card abre esse link numa nova aba,
+//   em vez de abrir a janela com o texto completo.
 const notizie = [
-  { data: "17/09/2026", titolo: "🏐 Amici di Scuola e dello Sport 2026/2027", testo: "Vi volevo informare cge da quest'anno i punti legati ad AMICI DI SCUOLA E DELLO SPORT ...", testoCompleto: "Cari genitori, desideriamo informarvi che da quest'anno la raccolta punti Amici di Scuola e dello Sport sarà completamente digitale. Chi desidera sostenere la nostra società ASD US K2 può scaricare l'applicazione ufficiale e caricare i punti accumulati, selezionando la nostra società sportiva all'interno dell'app. Ogni anno questi punti rappresentano un aiuto concreto per la società, che li utilizza per richiedere materiale e attrezzature sportive a supporto delle attività delle nostre ragazze e delle diverse squadre del club. Nel gruppo WhatsApp K2 U14 trovate tutte le informazioni necessarie per scaricare l'app e partecipare all'iniziativa. Ringraziamo di cuore tutte le famiglie per il prezioso supporto e per il contributo alla crescita delle nostre future campionesse! 💙🏐💛. Grazie a tutti per la collaborazione! Staff ASD US K2 U14.", evidenza: true },
-  { data: "20/09/2026", titolo: "📢 Grigliata di Inizio Stagione 2026/2027! 🍖🔥", testo: "Finalmente si parte! Prima di tuffarci in allenamenti, partite, schiacciate...", testoCompleto: "Finalmente si parte! Prima di tuffarci in allenamenti, partite, schiacciate e qualche tuffo spettacolare (più o meno volontario 😄), è arrivato il momento di ritrovarci per una bella grigliata di squadra!.", evidenza: true },
-  { data: "20/09/2026", titolo: "Comune di San Donato Milanese", testo: "Domenica 20 settembre la città festeggia il Patrono.", testoCompleto: "Comune di San Donato Milanese - Domenica 20 settembre la città festeggia il Patrono. Processione con arrivo nella chiesa nuova dove sarà celebrata la santa messa alle ore 10.30 e presentazione dei lavori di restauro che stanno interessando la Pieve alle ore 17.30", evidenza: false }
-  
+  { data: "17/09/2026", titolo: "🏐 Amici di Scuola e dello Sport 2026/2027", testo: "Vi volevo informare cge da quest'anno i punti legati ad AMICI DI SCUOLA E DELLO SPORT ...", testoCompleto: "Cari genitori, desideriamo informarvi che da quest'anno la raccolta punti Amici di Scuola e dello Sport sarà completamente digitale. Chi desidera sostenere la nostra società ASD US K2 può scaricare l'applicazione ufficiale e caricare i punti accumulati, selezionando la nostra società sportiva all'interno dell'app. Ogni anno questi punti rappresentano un aiuto concreto per la società, che li utilizza per richiedere materiale e attrezzature sportive a supporto delle attività delle nostre ragazze e delle diverse squadre del club. Nel gruppo WhatsApp K2 U14 trovate tutte le informazioni necessarie per scaricare l'app e partecipare all'iniziativa. Ringraziamo di cuore tutte le famiglie per il prezioso supporto e per il contributo alla crescita delle nostre future campionesse! 💙🏐💛. Grazie a tutti per la collaborazione! Staff ASD US K2 U14.", immagine: "", linkEsterno: "", evidenza: true },
+  { data: "20/09/2026", titolo: "📢 Grigliata di Inizio Stagione 2026/2027! 🍖🔥", testo: "Finalmente si parte! Prima di tuffarci in allenamenti, partite, schiacciate...", testoCompleto: "Finalmente si parte! Prima di tuffarci in allenamenti, partite, schiacciate e qualche tuffo spettacolare (più o meno volontario 😄), è arrivato il momento di ritrovarci per una bella grigliata di squadra!.", immagine: "", linkEsterno: "", evidenza: true },
+  { data: "20/09/2026", titolo: "Comune di San Donato Milanese", testo: "Domenica 20 settembre la città festeggia il Patrono.", testoCompleto: "Comune di San Donato Milanese - Domenica 20 settembre la città festeggia il Patrono. Processione con arrivo nella chiesa nuova dove sarà celebrata la santa messa alle ore 10.30 e presentazione dei lavori di restauro che stanno interessando la Pieve alle ore 17.30", immagine: "", linkEsterno: "", evidenza: false }
+  // Esempio con immagine e link esterno:
+  { data: "3 e 5 ottobre 2026", titolo: "Festa dell'Oratorio ", testo: "Festa dell'Oratorio a San Donato Milanese.", testoCompleto: "Buon pomeriggio a tutti,
+
+desideriamo segnalarvi che nel weekend del 3 e 4 ottobre si terrà la Festa dell'Oratorio di San Donato V. e M., che inaugurerà ufficialmente il nuovo anno oratoriano con il tema - SEI NELLA FESTA !!. Sarà un occasione speciale per trascorrere del tempo insieme, incontrare altre famiglie, partecipare a giochi, attività, momenti di condivisione e vivere lo spirito della nostra comunità in un clima di allegria e amicizia. Per i ragazzi sarà un opportunità per divertirsi con i propri compagni anche al di fuori del campo da pallavolo, mentre per noi genitori sarà un piacevole momento per conoscerci meglio e rafforzare il senso di squadra che accompagna le nostre ragazze durante tutta la stagione. Vi invitiamo a partecipare numerosi e a condividere questo momento di festa con le vostre famiglie! Di seguito trovate il programma completo dell evento. 💙🏐💛", immagine: "IMAGES/InfoPHOTO-2026-09-24-20-32-20.jpg/", linkEsterno: "", evidenza: true }
 ];
 // --- CALENDARIO PARTITE ---
 // tipo: "Campionato" oppure "Amichevole"
@@ -726,8 +737,16 @@ function creaCardNotizia(n, indice){
   const div = document.createElement('button');
   div.type = 'button';
   div.className = 'notizia' + (n.evidenza ? ' evidenza' : '');
-  div.innerHTML = `<div class="data">${n.data}</div><h3>${n.titolo}</h3><p>${n.testo}</p><span class="leggi">Leggi tutto →</span>`;
-  div.addEventListener('click', () => apriNotizia(indice));
+  const immagineHtml = n.immagine ? `<img class="notizia-img" src="${n.immagine}" alt="">` : '';
+  const testoLink = n.linkEsterno ? 'Vai alla notizia ↗' : 'Leggi tutto →';
+  div.innerHTML = `${immagineHtml}<div class="data">${n.data}</div><h3>${n.titolo}</h3><p>${n.testo}</p><span class="leggi">${testoLink}</span>`;
+  div.addEventListener('click', () => {
+    if(n.linkEsterno){
+      window.open(n.linkEsterno, '_blank', 'noopener,noreferrer');
+    } else {
+      apriNotizia(indice);
+    }
+  });
   return div;
 }
 if(notizie.length > 0){
@@ -741,6 +760,13 @@ const notiziaModalOverlay = document.getElementById('notiziaModalOverlay');
 const notiziaModalChiudi = document.getElementById('notiziaModalChiudi');
 function apriNotizia(indice){
   const n = notizie[indice];
+  const modalImg = document.getElementById('modalImagem');
+  if(n.immagine){
+    modalImg.src = n.immagine;
+    modalImg.style.display = 'block';
+  } else {
+    modalImg.style.display = 'none';
+  }
   document.getElementById('modalData').textContent = n.data;
   document.getElementById('modalTitolo').textContent = n.titolo;
   document.getElementById('modalTesto').textContent = n.testoCompleto && n.testoCompleto.trim() !== '' ? n.testoCompleto : n.testo;
