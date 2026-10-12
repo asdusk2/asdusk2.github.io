@@ -256,6 +256,12 @@
   .risultato-card .quando{font-size:13px; color:var(--testo-chiaro);}
   .risultato-card .punteggio{font-size:22px; color:var(--blu-notte);}
   .classifica-tabella th:first-child, .classifica-tabella td:first-child{text-align:center; width:44px;}
+  .classifica-tabella th, .classifica-tabella td{padding:12px 8px; font-size:13.5px; text-align:center;}
+  .classifica-tabella th:nth-child(2), .classifica-tabella td:nth-child(2){text-align:left;}
+  .classifica-tabella{min-width:640px;}
+  .squadra-cella{display:flex; align-items:center; gap:10px; font-weight:600;}
+  .squadra-logo{width:28px; height:28px; border-radius:50%; object-fit:cover; flex:none; border:1px solid var(--riga); background:var(--bianco);}
+  .squadra-logo-vuoto{width:28px; height:28px; border-radius:50%; flex:none; background:var(--panna); border:1px dashed var(--riga);}
   .riga-k2{background:#FFF9E0;}
 
   /* ---------- GALLERIA ---------- */
@@ -486,7 +492,7 @@
           <h3 style="text-transform:none; letter-spacing:0; color:var(--blu-notte); font-size:18px; margin-bottom:16px;">Classifica</h3>
           <div class="table-scroll">
             <table class="classifica-tabella">
-              <thead><tr><th>#</th><th>Squadra</th><th>G</th><th>V</th><th>P</th><th>Punti</th></tr></thead>
+              <thead><tr><th>#</th><th>Squadra</th><th title="Giocate">G</th><th title="Vinte">V</th><th title="Perse">P</th><th title="Penalità">Pen.</th><th title="Set Vinti">SV</th><th title="Set Persi">SP</th><th title="Punti Fatti">PF</th><th title="Punti Subiti">PS</th><th>Punti</th></tr></thead>
               <tbody id="corpoClassifica"></tbody>
             </table>
           </div>
@@ -643,16 +649,21 @@ const risultati = [
 ];
 
 // --- CLASSIFICA ---
+// Campi: g=giocate, v=vinte, p=perse, pen=penalità, sv=set vinti, sp=set persi,
+//        pf=punti fatti, ps=punti subiti, punti=punti in classifica.
+// logo: nome del file nella cartella "IMAGES/Logos" (es. "k2.png").
+//       Lasciate "" se non avete il logo: apparirà un cerchio vuoto.
+const cartellaLoghi = "IMAGES/Logos/";
 const classifica = [
-  // Esempio: { pos: 1, squadra: "ASD US K2", g: 0, v: 0, p: 0, punti: 0, noi: true }
-  { pos: 1, squadra: "OMF BLUE PANTHER", g: 1, v: 1, p: 0, punti: 3, noi: false },
-  { pos: 2, squadra: "ASD US K2", g: 1, v: 1, p: 0, punti: 2, noi: true },
-  { pos: 3, squadra: "USSA ROZZANO", g: 1, v: 0, p: 1, punti: 1, noi: false },
-  { pos: 4, squadra: "APO S.CARLO", g: 1, v: 0, p: 1, punti: 0, noi: false },
-  { pos: 5, squadra: "MI3 VOLLEY U14 ROSSA", g: 0, v: 0, p: 0, punti: 0, noi: false },
-  { pos: 6, squadra: "PRIMAVERA 2005", g: 0, v: 0, p: 0, punti: 0, noi: false },
-  { pos: 7, squadra: "NEW EVERGREEN", g: 0, v: 0, p: 0, punti: 0, noi: false },
-  { pos: 8, squadra: "SAMZ MILANO", g: 0, v: 0, p: 0, punti: 0, noi: false }
+  // Esempio: { pos: 1, squadra: "ASD US K2", logo: "k2.png", g: 0, v: 0, p: 0, pen: 0, sv: 0, sp: 0, pf: 0, ps: 0, punti: 0, noi: true }
+  { pos: 1, squadra: "OMF BLUE PANTHER", logo: "", g: 1, v: 1, p: 0, pen: 0, sv: 0, sp: 0, pf: 0, ps: 0, punti: 3, noi: false },
+  { pos: 2, squadra: "ASD US K2", logo: "", g: 1, v: 1, p: 0, pen: 0, sv: 0, sp: 0, pf: 0, ps: 0, punti: 2, noi: true },
+  { pos: 3, squadra: "USSA ROZZANO", logo: "", g: 1, v: 0, p: 1, pen: 0, sv: 0, sp: 0, pf: 0, ps: 0, punti: 1, noi: false },
+  { pos: 4, squadra: "APO S.CARLO", logo: "", g: 1, v: 0, p: 1, pen: 0, sv: 0, sp: 0, pf: 0, ps: 0, punti: 0, noi: false },
+  { pos: 5, squadra: "MI3 VOLLEY U14 ROSSA", logo: "", g: 0, v: 0, p: 0, pen: 0, sv: 0, sp: 0, pf: 0, ps: 0, punti: 0, noi: false },
+  { pos: 6, squadra: "PRIMAVERA 2005", logo: "", g: 0, v: 0, p: 0, pen: 0, sv: 0, sp: 0, pf: 0, ps: 0, punti: 0, noi: false },
+  { pos: 7, squadra: "NEW EVERGREEN", logo: "", g: 0, v: 0, p: 0, pen: 0, sv: 0, sp: 0, pf: 0, ps: 0, punti: 0, noi: false },
+  { pos: 8, squadra: "SAMZ MILANO", logo: "", g: 0, v: 0, p: 0, pen: 0, sv: 0, sp: 0, pf: 0, ps: 0, punti: 0, noi: false }
 ];
 
 // --- ELENCO ATLETE ---
@@ -806,12 +817,19 @@ if(risultati.length === 0){
 
 const corpoClassifica = document.getElementById('corpoClassifica');
 if(classifica.length === 0){
-  corpoClassifica.innerHTML = `<tr><td colspan="6">La classifica sarà disponibile con l'inizio del campionato.</td></tr>`;
+  corpoClassifica.innerHTML = `<tr><td colspan="11">La classifica sarà disponibile con l'inizio del campionato.</td></tr>`;
 } else {
   classifica.forEach(c => {
     const tr = document.createElement('tr');
     if(c.noi) tr.className = 'riga-k2';
-    tr.innerHTML = `<td>${c.pos}</td><td>${c.squadra}</td><td>${c.g}</td><td>${c.v}</td><td>${c.p}</td><td><strong>${c.punti}</strong></td>`;
+    const logoHtml = c.logo
+      ? `<img class="squadra-logo" src="${cartellaLoghi}${c.logo}" alt="Logo ${c.squadra}" loading="lazy">`
+      : `<span class="squadra-logo-vuoto" aria-hidden="true"></span>`;
+    tr.innerHTML = `<td>${c.pos}</td>
+      <td><div class="squadra-cella">${logoHtml}<span>${c.squadra}</span></div></td>
+      <td>${c.g}</td><td>${c.v}</td><td>${c.p}</td><td>${c.pen ?? 0}</td>
+      <td>${c.sv ?? 0}</td><td>${c.sp ?? 0}</td><td>${c.pf ?? 0}</td><td>${c.ps ?? 0}</td>
+      <td><strong>${c.punti}</strong></td>`;
     corpoClassifica.appendChild(tr);
   });
 }
