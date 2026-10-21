@@ -150,6 +150,17 @@
     line-height:1.05; margin:0 0 6px;
   }
   .prossima-avversario small{display:block; font-family:'Manrope',sans-serif; text-transform:none; font-size:14px; color:#B9C3DC; font-weight:600; margin-bottom:4px;}
+  .prossima-tipo{display:block; text-align:center; font-size:14px; color:#B9C3DC; font-weight:600; margin-bottom:10px;}
+  .prossima-sfida{display:flex; align-items:center; justify-content:center; gap:14px; margin:0 0 16px;}
+  .pp-logo{
+    width:88px; height:88px; border-radius:50%; object-fit:cover; flex:none;
+    background:var(--bianco); border:3px solid var(--giallo);
+  }
+  .pp-vs{font-family:'Oswald',sans-serif; font-size:22px; color:var(--giallo); letter-spacing:.04em;}
+  .pp-nome{
+    font-family:'Oswald',sans-serif; text-transform:uppercase; font-size:18px; line-height:1.1;
+    text-align:center; max-width:110px; overflow-wrap:anywhere;
+  }
   .prossima-quando{font-weight:700; font-size:15px; color:#E6ECFA; margin:0 0 4px;}
   .prossima-luogo{font-size:13.5px; color:#B9C3DC; margin:0 0 4px; line-height:1.45;}
   .prossima-luogo a{color:var(--giallo); text-decoration:none; border-bottom:1px solid currentColor;}
@@ -1026,6 +1037,32 @@ function trovaProssima(){
     .sort((x, y) => x.inizio - y.inizio)[0] || null;
 }
 function pad2(n){ return String(n).padStart(2, '0'); }
+
+// I logo della card sono quelli della CLASSIFICA (stessa cartella e stessi file).
+// Il nome nel calendario viene confrontato con quello in classifica, ignorando
+// maiuscole, spazi e punti (es. "MI3 VOLLEY" trova "MI3 VOLLEY U14 ROSSA").
+// Per forzare un logo diverso, aggiungete logo: "file.jpg" alla partita del calendario.
+// Se il logo manca o non si carica, appare il nome della squadra.
+function normalizzaNome(s){ return String(s).toUpperCase().replace(/[^A-Z0-9]/g, ''); }
+function logoDaClassifica(nome, èK2){
+  if(èK2){
+    const k2 = classifica.find(c => c.noi);
+    return k2 ? k2.logo : '';
+  }
+  const n = normalizzaNome(nome);
+  const trovata = classifica.find(c => {
+    if(c.noi) return false;
+    const cn = normalizzaNome(c.squadra);
+    return cn === n || cn.includes(n) || n.includes(cn);
+  });
+  return trovata ? trovata.logo : '';
+}
+function logoSquadra(nome, file){
+  const nomeSicuro = String(nome).replace(/"/g, '&quot;');
+  if(!file){ return `<span class="pp-nome">${nome}</span>`; }
+  return `<img class="pp-logo" src="${cartellaLoghi}${file}" alt="Logo ${nomeSicuro}" title="${nomeSicuro}"
+    onerror="this.outerHTML='<span class=&quot;pp-nome&quot;>${nomeSicuro}</span>'">`;
+}
 let timerProssima = null;
 function disegnaProssima(){
   clearInterval(timerProssima);
@@ -1038,8 +1075,13 @@ function disegnaProssima(){
   const luogoHtml = m.mappaLink
     ? `<a href="${m.mappaLink}" target="_blank" rel="noopener noreferrer">${m.luogo} ↗</a>`
     : m.luogo;
+  const imgK2 = logoSquadra('ASD US K2', logoDaClassifica('ASD US K2', true));
+  const imgAvv = logoSquadra(m.avversario, m.logo || logoDaClassifica(m.avversario, false));
   prossimaCorpo.innerHTML = `
-    <div class="prossima-avversario"><small>${m.tipo}</small>K2 vs ${m.avversario}</div>
+    <span class="prossima-tipo">${m.tipo}</span>
+    <div class="prossima-sfida" role="img" aria-label="ASD US K2 contro ${m.avversario}">
+      ${m.casa ? imgK2 : imgAvv}<span class="pp-vs">VS</span>${m.casa ? imgAvv : imgK2}
+    </div>
     <p class="prossima-quando">${m.giorno} ${m.data} · ore ${m.orario}</p>
     <p class="prossima-luogo">${luogoHtml}</p>
     <span class="badge ${m.casa ? 'badge-casa' : 'badge-trasferta'}">${m.casa ? 'In casa' : 'Trasferta'}</span>
