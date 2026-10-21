@@ -134,6 +134,34 @@
   .stat b{display:block; font-family:'Oswald',sans-serif; font-size:34px; color:var(--giallo);}
   .stat span{font-size:13.5px; color:#8FA0C4; font-weight:600;}
 
+  /* ---------- PROSSIMA PARTITA (HERO) ---------- */
+  .prossima{
+    flex:1 1 320px; max-width:420px; min-width:0;
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,209,0,0.45);
+    border-top:5px solid var(--giallo); border-radius:var(--radius);
+    padding:24px; color:var(--bianco); backdrop-filter:blur(2px);
+  }
+  .prossima-titolo{
+    font-family:'Oswald',sans-serif; text-transform:uppercase; letter-spacing:.06em;
+    font-size:14px; color:var(--giallo); margin:0 0 10px; font-weight:600;
+  }
+  .prossima-avversario{
+    font-family:'Oswald',sans-serif; text-transform:uppercase; font-size:clamp(26px,4vw,36px);
+    line-height:1.05; margin:0 0 6px;
+  }
+  .prossima-avversario small{display:block; font-family:'Manrope',sans-serif; text-transform:none; font-size:14px; color:#B9C3DC; font-weight:600; margin-bottom:4px;}
+  .prossima-quando{font-weight:700; font-size:15px; color:#E6ECFA; margin:0 0 4px;}
+  .prossima-luogo{font-size:13.5px; color:#B9C3DC; margin:0 0 4px; line-height:1.45;}
+  .prossima-luogo a{color:var(--giallo); text-decoration:none; border-bottom:1px solid currentColor;}
+  .prossima .badge{margin-top:8px;}
+  .conto{display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:18px;}
+  .conto div{background:rgba(7,26,61,0.7); border:1px solid #223257; border-radius:10px; text-align:center; padding:10px 4px;}
+  .conto b{display:block; font-family:'Oswald',sans-serif; font-size:30px; line-height:1; color:var(--giallo); font-variant-numeric:tabular-nums;}
+  .conto span{font-size:11.5px; text-transform:uppercase; letter-spacing:.06em; color:#8FA0C4; font-weight:700;}
+  .conto[hidden], .prossima-stato[hidden]{display:none;}
+  .prossima-stato{margin:18px 0 0; font-weight:700; color:var(--giallo); font-size:16px;}
+  @media (max-width:640px){ .prossima{max-width:none; flex-basis:100%;} .conto b{font-size:26px;} }
+
   /* ---------- SECTION HEADINGS ---------- */
   .intestazione{max-width:620px; margin-bottom:44px;}
   .intestazione .tag{color:var(--blu-acceso); font-weight:700; font-size:13.5px; letter-spacing:.03em;}
@@ -430,6 +458,10 @@
             <a href="#risultati" class="btn btn-secondario">Ultimi risultati</a>
           </div>
         </div>
+        <aside class="prossima" id="prossimaPartita" aria-live="polite" aria-label="Prossima partita">
+          <h2 class="prossima-titolo">Prossima partita</h2>
+          <div id="prossimaCorpo"></div>
+        </aside>
       </div>
       <div class="hero-stats">
         <div class="stat"><b id="statPartite">—</b><span>Partite in calendario</span></div>
@@ -975,6 +1007,68 @@ if(atlete.length === 0){
     grigliaElenco.appendChild(div);
   });
 }
+
+// --- PROSSIMA PARTITA (letta automaticamente dall'elenco "calendario") ---
+// Non serve modificare nulla qui: la card nell'hero mostra la prima partita
+// del calendario che non è ancora finita e si aggiorna da sola.
+const prossimaCorpo = document.getElementById('prossimaCorpo');
+const DURATA_PARTITA_MS = 2 * 60 * 60 * 1000; // dopo 2 ore dall'inizio la partita è considerata finita
+function inizioPartita(m){
+  const [g, me, a] = m.data.split('/').map(Number);
+  const [h, mi] = m.orario.split(':').map(Number);
+  return new Date(a, me - 1, g, h, mi).getTime();
+}
+function trovaProssima(){
+  const ora = Date.now();
+  return calendario
+    .map(m => ({ m, inizio: inizioPartita(m) }))
+    .filter(x => !isNaN(x.inizio) && x.inizio + DURATA_PARTITA_MS > ora)
+    .sort((x, y) => x.inizio - y.inizio)[0] || null;
+}
+function pad2(n){ return String(n).padStart(2, '0'); }
+let timerProssima = null;
+function disegnaProssima(){
+  clearInterval(timerProssima);
+  const p = trovaProssima();
+  if(!p){
+    prossimaCorpo.innerHTML = `<p class="prossima-avversario">Calendario in arrivo</p><p class="prossima-luogo">Le prossime partite saranno pubblicate a breve.</p>`;
+    return;
+  }
+  const m = p.m;
+  const luogoHtml = m.mappaLink
+    ? `<a href="${m.mappaLink}" target="_blank" rel="noopener noreferrer">${m.luogo} ↗</a>`
+    : m.luogo;
+  prossimaCorpo.innerHTML = `
+    <div class="prossima-avversario"><small>${m.tipo}</small>K2 vs ${m.avversario}</div>
+    <p class="prossima-quando">${m.giorno} ${m.data} · ore ${m.orario}</p>
+    <p class="prossima-luogo">${luogoHtml}</p>
+    <span class="badge ${m.casa ? 'badge-casa' : 'badge-trasferta'}">${m.casa ? 'In casa' : 'Trasferta'}</span>
+    <div class="conto" id="contoRovescia">
+      <div><b id="cGiorni">0</b><span>giorni</span></div>
+      <div><b id="cOre">00</b><span>ore</span></div>
+      <div><b id="cMin">00</b><span>min</span></div>
+      <div><b id="cSec">00</b><span>sec</span></div>
+    </div>
+    <p class="prossima-stato" id="statoProssima" hidden>Partita in corso. Forza K2!</p>`;
+  const el = id => document.getElementById(id);
+  function tick(){
+    const diff = p.inizio - Date.now();
+    if(diff <= 0){
+      el('contoRovescia').hidden = true;
+      el('statoProssima').hidden = false;
+      if(Date.now() >= p.inizio + DURATA_PARTITA_MS){ disegnaProssima(); }
+      return;
+    }
+    const s = Math.floor(diff / 1000);
+    el('cGiorni').textContent = Math.floor(s / 86400);
+    el('cOre').textContent = pad2(Math.floor(s % 86400 / 3600));
+    el('cMin').textContent = pad2(Math.floor(s % 3600 / 60));
+    el('cSec').textContent = pad2(s % 60);
+  }
+  tick();
+  timerProssima = setInterval(tick, 1000);
+}
+disegnaProssima();
 
 // Statistiche rapide nell'hero
 document.getElementById('statPartite').textContent = calendario.length && calendario[0].data !== '—' ? calendario.length : '—';
